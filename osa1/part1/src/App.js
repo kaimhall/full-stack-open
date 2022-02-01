@@ -1,25 +1,24 @@
 import React from 'react';
 
 const Hello = (props) => {
+ 
+  const {age, name} = props.person;
+  const bornYear = () => new Date().getFullYear() - age
+  
   return (
     <div>
+      <p> Hello {name}, you are {age} years old</p>
       <p>
-        Hello {props.name}, you are {props.age} years old
-      </p>
+        so you were born {bornYear()}
+      </p>  
     </div>
   )
 }
-const App = () => {
-  const nimi = 'Pekka'
-  const ika = 10
 
+const App = (props) => {
+  const {counter} = props
   return (
-    <>
-      <h1>Greetings</h1>
-      <Hello name ='Maya' age={26+10} />
-      <Hello name ={nimi} age={ika}/>
-    </>
+    <div>{counter}</div>
   )
 }
-
-export default App;
+export default App
