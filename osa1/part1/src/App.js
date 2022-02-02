@@ -1,24 +1,35 @@
-import React from 'react';
+import React, {useState} from 'react';
 
-const Hello = (props) => {
- 
-  const {age, name} = props.person;
-  const bornYear = () => new Date().getFullYear() - age
+const Display = ({counter}) => <div>{counter}</div>
   
+const Button = ({handleClick,  text}) => (
+    <button onClick= {handleClick}>
+      {text}
+    </button>
+  )
+
+const App = () => {
+  const [counter, setCounter] = useState(0);
+  const increaseByOne = () => setCounter(counter +1);
+  const decreaseByOne = () => setCounter(counter -1);
+  const setZero = () => setCounter(0);
+
   return (
     <div>
-      <p> Hello {name}, you are {age} years old</p>
-      <p>
-        so you were born {bornYear()}
-      </p>  
+      <Display counter={counter}/>
+      <Button 
+        handleClick={increaseByOne}
+        text= 'plus'
+      />
+      <Button 
+        handleClick={decreaseByOne}
+        text= 'minus'
+      />
+      <Button 
+        handleClick={setZero}
+        text= 'zero'
+      />
     </div>
-  )
-}
-
-const App = (props) => {
-  const {counter} = props
-  return (
-    <div>{counter}</div>
   )
 }
 export default App
