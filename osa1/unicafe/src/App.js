@@ -20,7 +20,6 @@ const Statistics = ({good, bad, neutral}) => {
   else {
     const average = ((good - bad )/cnt).toFixed(1)
     const positive = ((good / cnt)*100).toFixed(1)
-  
     return (
       <div>
         <StatisticsLine text= 'good' value= {good} />
@@ -48,12 +47,24 @@ const App = () => {
       neutral: 0
     } 
   )
+  const updateGood = () => {
+    const newObj = {...feedback, good: feedback.good +1}
+    return newObj
+  }
+  const updateNeutral = () => {
+    const newObj = {...feedback, neutral: feedback.neutral +1}
+    return newObj
+  }
+  const updateBad = () => {
+    const newObj = {...feedback, bad: feedback.bad +1}
+    return newObj
+  }
   return (
     <div>
       <h1>give feedback</h1>
-      <Button handleClick={() => setFeedback({...feedback, good: feedback.good +1})} text= 'good' />
-      <Button handleClick={() => setFeedback({...feedback, neutral: feedback.neutral +1})} text= 'neutral' />
-      <Button handleClick={() => setFeedback({...feedback, bad: feedback.bad +1})} text= 'bad' />
+      <Button handleClick={() => setFeedback(updateGood)} text= 'good' />
+      <Button handleClick={() => setFeedback(updateNeutral)} text= 'neutral' />
+      <Button handleClick={() => setFeedback(updateBad)} text= 'bad' />
       <h1>statistics</h1>
       <Statistics {...feedback} />
     </div>
