@@ -25,6 +25,22 @@ const RenderImage = ({object}) => {
   )
 }
 
+const DisplayCountry = (object) => {
+  //console.log(object.name.common)
+  const elem =  <div>
+      <h2>{object.name.common}</h2>
+        <div>
+          Capital: {object.capital}<br></br>
+          Area: {object.area}<br></br>
+          <h2>languages</h2>
+          <RenderLanguage object= {object.languages} />
+          <RenderImage object= {object.flags} />
+        </div>
+    </div>
+}
+
+const DisplayButton = (object) => <button onClick= {DisplayCountry(object)}>show</button>
+
 const Countries = ({countries, countryFilter}) => {
   const countryList = countries
     .filter(country => country.name.common
@@ -36,8 +52,13 @@ const Countries = ({countries, countryFilter}) => {
   }
   
   else if (countryList.length === 0 ||  countryList.length > 1) {
-    return (countryList.map(country => <div key={country.name.common}> {country.name.common} </div>))
+    return (
+      countryList.map(
+        country => <div key={country.name.common}> {country.name.common} {DisplayButton(country)} </div>
+      )
+    )
   }
+
   else {
     return (
       <div>
@@ -74,6 +95,7 @@ const App = () => {
     <div >
       <Filter changeHandler = {filterChangeHandler} />
       <Countries countries={countries} countryFilter = {countryFilter} />
+      <div id= 'DisplayCountry'></div>
     </div>
   )
 }
