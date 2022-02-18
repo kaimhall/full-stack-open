@@ -9,7 +9,21 @@ const Filter = ({changeHandler}) => {
     </div>
   )
 }
-//countries.map(country => <div key= {country.name.common}> {country.name.common} </div>)
+const RenderLanguage = ({object}) => {
+  return (
+    <ul>
+      {Object.values(object).map(value => <li key={value}> {value} </li>)}
+    </ul>
+  )
+}
+
+const RenderImage = ({object}) => {
+  return (
+    <div>
+      <img src={object.svg} alt='flag' height= {200} width={200}/>
+    </div>
+  )
+}
 
 const Countries = ({countries, countryFilter}) => {
   const countryList = countries
@@ -29,10 +43,11 @@ const Countries = ({countries, countryFilter}) => {
       <div>
         <h2>{countryList[0].name.common}</h2>
         <div>
-          {countryList[0].capital}<br></br>
-          {countryList[0].area}<br></br>
+          Capital: {countryList[0].capital}<br></br>
+          Area: {countryList[0].area}<br></br>
           <h2>languages</h2>
-          
+          <RenderLanguage object= {countryList[0].languages} />
+          <RenderImage object= {countryList[0].flags} />
         </div>
       </div>
     )
@@ -46,13 +61,15 @@ const App = () => {
   useEffect(() => {
     axios
       .get('https://restcountries.com/v3.1/all?')
-      .then(response => setCountries(response.data)
+      .then(response => 
+        setCountries(response.data)
   )}, [])
 
   const filterChangeHandler = (event) => {
     setCountryFilter(event.target.value)
   }
-
+  //console.log(countries)
+  
   return (
     <div >
       <Filter changeHandler = {filterChangeHandler} />
