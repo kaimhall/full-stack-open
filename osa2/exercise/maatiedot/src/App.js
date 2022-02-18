@@ -9,37 +9,26 @@ const Filter = ({changeHandler}) => {
     </div>
   )
 }
-const RenderLanguage = ({object}) => {
-  return (
-    <ul>
-      {Object.values(object).map(value => <li key={value}> {value} </li>)}
-    </ul>
-  )
-}
-
-const RenderImage = ({object}) => {
-  return (
-    <div>
-      <img src={object.svg} alt='flag' height= {200} width={200}/>
-    </div>
-  )
-}
 
 const DisplayCountry = (object) => {
-  //console.log(object.name.common)
-  const elem =  <div>
-      <h2>{object.name.common}</h2>
-        <div>
-          Capital: {object.capital}<br></br>
-          Area: {object.area}<br></br>
-          <h2>languages</h2>
-          <RenderLanguage object= {object.languages} />
-          <RenderImage object= {object.flags} />
+  const imageUrl = object.flags.svg
+  const languageList = Object.values(object.languages).map(value => `<li>${value}</li>`).join('')
+  
+  document.getElementById('DisplayCountry').innerHTML = 
+    `<div>
+      <h2>${object.name.common}</h2>
+      <div>
+        Capital: ${object.capital}<br>  
+        Area: ${object.area}<br>
+        <h2>languages</h2>
+        <ul>
+          ${languageList}
+        </ul>
+        <img src=${imageUrl} alt='flag' height= ${100} width= ${200}/>
         </div>
     </div>
+    ` 
 }
-
-const DisplayButton = (object) => <button onClick= {DisplayCountry(object)}>show</button>
 
 const Countries = ({countries, countryFilter}) => {
   const countryList = countries
@@ -54,24 +43,18 @@ const Countries = ({countries, countryFilter}) => {
   else if (countryList.length === 0 ||  countryList.length > 1) {
     return (
       countryList.map(
-        country => <div key={country.name.common}> {country.name.common} {DisplayButton(country)} </div>
+        country => 
+        <div key={country.name.common}>
+          {country.name.common} 
+          <button onClick= {() => DisplayCountry(country) }> show </button>
+        </div>
       )
     )
   }
 
   else {
-    return (
-      <div>
-        <h2>{countryList[0].name.common}</h2>
-        <div>
-          Capital: {countryList[0].capital}<br></br>
-          Area: {countryList[0].area}<br></br>
-          <h2>languages</h2>
-          <RenderLanguage object= {countryList[0].languages} />
-          <RenderImage object= {countryList[0].flags} />
-        </div>
-      </div>
-    )
+    DisplayCountry(countryList[0])
+    return null
   }
 }
 
