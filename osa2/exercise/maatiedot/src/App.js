@@ -9,11 +9,27 @@ const Filter = ({changeHandler}) => {
     </div>
   )
 }
+const DisplayWeather = (url) => {
+  fetch(url)
+    .then(response => response.json())
+    .then(data => {
+      document.getElementById('DisplayWeather').innerHTML = 
+      `
+      <h2>Weather in ${data.name}</h2>
+      <div>temperature ${data.main.temp} celcius</div>
+      <img src= 'http://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png'</img>
+      <div>wind ${data.wind.speed} m/s</div>
+      `
 
+    })
+}
 const DisplayCountry = (object) => {
+  const api_key = process.env.REACT_APP_API_KEY
+  const url = `http://api.openweathermap.org/data/2.5/weather?q=${object.capital}&units=metric&appid=${api_key}`
+
   const imageUrl = object.flags.svg
   const languageList = Object.values(object.languages).map(value => `<li>${value}</li>`).join('')
-  
+
   document.getElementById('DisplayCountry').innerHTML = 
     `<div>
       <h2>${object.name.common}</h2>
@@ -28,6 +44,7 @@ const DisplayCountry = (object) => {
         </div>
     </div>
     ` 
+  DisplayWeather(url)
 }
 
 const Countries = ({countries, countryFilter}) => {
@@ -37,9 +54,10 @@ const Countries = ({countries, countryFilter}) => {
     .includes(countryFilter.toLowerCase()))
   
   if (countryList.length > 10) {
+    document.getElementById('DisplayWeather').innerHTML = ''
+    document.getElementById('DisplayCountry').innerHTML = ''
     return ("too many matches, specify another filter")
   }
-  
   else if (countryList.length === 0 ||  countryList.length > 1) {
     return (
       countryList.map(
@@ -51,17 +69,14 @@ const Countries = ({countries, countryFilter}) => {
       )
     )
   }
-
   else {
     DisplayCountry(countryList[0])
     return null
   }
 }
-
 const App = () => {
   const [countries, setCountries] = useState([])
   const [countryFilter, setCountryFilter] = useState('')
-  
   useEffect(() => {
     axios
       .get('https://restcountries.com/v3.1/all?')
@@ -72,13 +87,12 @@ const App = () => {
   const filterChangeHandler = (event) => {
     setCountryFilter(event.target.value)
   }
-  //console.log(countries)
-  
   return (
     <div >
       <Filter changeHandler = {filterChangeHandler} />
       <Countries countries={countries} countryFilter = {countryFilter} />
       <div id= 'DisplayCountry'></div>
+      <div id= 'DisplayWeather'></div>
     </div>
   )
 }
