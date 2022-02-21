@@ -58,7 +58,7 @@ const App = () => {
       .then(response => setPersons(response.data)
     )},
     [])
-  console.log(persons)
+
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filterName, setFilterName] = useState('')
