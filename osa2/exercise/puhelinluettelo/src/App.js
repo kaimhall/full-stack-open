@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
+import personservice from './services/persons'
 
 const Filter = ({changeHandler}) => {
   return (
@@ -9,32 +10,38 @@ const Filter = ({changeHandler}) => {
     </div>
   )
 }
-const PersonForm = ({persons, name, number, nameHandler, numberHandler, setPersons, setNumber, setName}) => {
+const PersonForm = ({appStates, handlerFunctions, setFunctions}) => {
   const addPerson = (event) => {
     event.preventDefault()
-    const usedNames = persons.map(p => p.name)
-    if(usedNames.includes(name)) {
-      window.alert(`${name} is already added to the phonebook`)
+    const usedNames = appStates.persons.map(p => p.name)
+    if(usedNames.includes(appStates.newName)) {
+      window.alert(`${appStates.newName} is already added to the phonebook`)
     }
     else {
       const personObject = {
-      name: name,
-      number: number,
+      name: appStates.newName,
+      number: appStates.newNumber,
       }
-      setPersons(persons.concat(personObject))
-      setName('')
-      setNumber('')
+      personservice
+        .create(personObject)
+        .then(addedPerson => {
+          setFunctions.setPersons(appStates.persons.concat(addedPerson))
+        })
+      
+      setFunctions.setNewName('')
+      setFunctions.setNewNumber('')
     }
   }
+  
   return (
     <form onSubmit = {addPerson}>
         <div>
           name:  
-          <input value = {name} onChange = {nameHandler} />
+          <input value = {appStates.newName} onChange = {handlerFunctions.nameChangeHandler} />
         </div>
         <div>
           number:  
-          <input value = {number} onChange = {numberHandler} />
+          <input value = {appStates.newNumber} onChange = {handlerFunctions.numberChangeHandler} />
         </div>
         <div>
           <button type="submit">add</button>
@@ -53,10 +60,12 @@ const Persons = ({persons, filterName}) => {
 const App = () => {
   const [persons, setPersons] = useState([])
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => setPersons(response.data)
-    )},
+    personservice
+      .getPersons()
+        .then(initPersons => {
+          setPersons(initPersons)
+        })
+      },
     [])
 
   const [newName, setNewName] = useState('')
@@ -72,15 +81,19 @@ const App = () => {
   const filterChangeHandler = (event) => {
     setFilterName(event.target.value)
   }
+  const setFunctions = {setPersons, setNewName, setNewNumber, setFilterName}
+  const handlerFunctions = {nameChangeHandler, numberChangeHandler, filterChangeHandler}
+  const appStates = {persons, newName, newNumber, filterName}
+
   return (
     <div>
       <h2>Phonebook</h2>
       <Filter changeHandler = {filterChangeHandler} />
       <h3>Add a new</h3>
       <PersonForm 
-        persons= {persons} name= {newName} number= {newNumber} 
-        nameHandler= {nameChangeHandler} numberHandler={numberChangeHandler}
-        setPersons= {setPersons} setName= {setNewName} setNumber= {setNewNumber}
+        appStates={appStates}
+        handlerFunctions= {handlerFunctions}
+        setFunctions= {setFunctions}
       />
       <h3>Numbers</h3>
         <Persons persons = {persons} filterName = {filterName} />
