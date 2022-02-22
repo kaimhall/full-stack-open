@@ -14,16 +14,33 @@ const PersonForm = ({appStates, handlerFunctions, setFunctions}) => {
   const addPerson = (event) => {
     event.preventDefault()
     const usedNames = appStates.persons.map(p => p.name)
+    
     if(usedNames.includes(appStates.newName)) {
-      window.alert(`${appStates.newName} is already added to the phonebook`)
+      const res = window.confirm(`${appStates.newName} is already added to the phonebook, replace the old number with a new one?`)
+      if (res) {
+        const id = appStates.persons
+          .filter(person => person.name === appStates.newName)
+          .map(person => person.id)
+        const newObject = {
+          name: appStates.newName,
+          number: appStates.newNumber,
+          id : id[0]
+        }
+        personservice.updatePerson(id, newObject)
+        personservice.getPersons()
+          .then(initPersons => {
+            setFunctions.setPersons(initPersons)
+          })
+      }
     }
+
     else {
       const personObject = {
       name: appStates.newName,
       number: appStates.newNumber,
       }
       personservice
-        .create(personObject)
+        .createPerson(personObject)
         .then(addedPerson => {
           setFunctions.setPersons(appStates.persons.concat(addedPerson))
         })
@@ -32,7 +49,6 @@ const PersonForm = ({appStates, handlerFunctions, setFunctions}) => {
       setFunctions.setNewNumber('')
     }
   }
-  
   return (
     <form onSubmit = {addPerson}>
         <div>
@@ -49,11 +65,28 @@ const PersonForm = ({appStates, handlerFunctions, setFunctions}) => {
       </form>
   )
 }
-const Persons = ({persons, filterName}) => {
+
+const removePerson = (person, setPersons) => {
+  const res = window.confirm(`Delete ${person.name}`)
+  if (res){
+    personservice
+      .deletePerson(person.id)   
+    personservice
+      .getPersons()
+      .then(initpersons => {
+      setPersons(initpersons)
+      })
+  }
+} 
+
+const Persons = ({persons, filterName, setFunctions}) => {
   const namesToShow = persons.filter(
     p => p.name.toLowerCase().includes(filterName.toLowerCase()))
-    return (
-      namesToShow.map(p => <div key={p.name}>{p.name} {p.number}</div>)
+  return (
+    namesToShow.map(p => 
+      <div key={p.name}>
+        {p.name} {p.number} <button onClick= {() => removePerson(p, setFunctions.setPersons)}> delete </button>
+      </div>)
     )
 }
 
@@ -96,7 +129,7 @@ const App = () => {
         setFunctions= {setFunctions}
       />
       <h3>Numbers</h3>
-        <Persons persons = {persons} filterName = {filterName} />
+        <Persons persons = {persons} filterName = {filterName} setFunctions= {setFunctions} />
     </div>
   )
 }
