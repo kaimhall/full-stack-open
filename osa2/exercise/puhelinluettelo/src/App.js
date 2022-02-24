@@ -1,6 +1,47 @@
 import { useEffect, useState } from 'react'
-import axios from 'axios'
 import personservice from './services/persons'
+
+const Notification = ({displayMessage, errorCode}) => {
+  
+  const okMessage = {
+    color: 'green',
+    background: 'lightgrey',
+    fontSize: 20,
+    borderStyle:'solid',
+    borderRadius: 5,
+    padding: 5,
+    marginBottom:10
+  }
+
+  const notOkMessage = {
+    color: 'red',
+    background: 'lightgrey',
+    fontSize: 20,
+    borderStyle:'solid',
+    borderRadius: 5,
+    padding: 5,
+    marginBottom:10
+  }
+
+  if (displayMessage === null) {
+    return null
+  }
+
+  else if (errorCode) {
+    return (
+      <div style= {notOkMessage}>
+        {displayMessage}
+      </div>
+    ) 
+  }
+  else {
+    return (
+      <div style= {okMessage}>
+        {displayMessage}
+      </div>
+    )
+  }
+}
 
 const Filter = ({changeHandler}) => {
   return (
@@ -11,12 +52,14 @@ const Filter = ({changeHandler}) => {
   )
 }
 const PersonForm = ({appStates, handlerFunctions, setFunctions}) => {
+  
   const addPerson = (event) => {
     event.preventDefault()
     const usedNames = appStates.persons.map(p => p.name)
     
     if(usedNames.includes(appStates.newName)) {
       const res = window.confirm(`${appStates.newName} is already added to the phonebook, replace the old number with a new one?`)
+      
       if (res) {
         const id = appStates.persons
           .filter(person => person.name === appStates.newName)
@@ -27,10 +70,24 @@ const PersonForm = ({appStates, handlerFunctions, setFunctions}) => {
           id : id[0]
         }
         personservice.updatePerson(id, newObject)
+        .catch(error => {
+          setFunctions.setDisplayMessage( `Information of  ${newObject.name} has allready been removed from server`)
+          setFunctions.setErrorCode(error)
+          setTimeout(() => {
+            setFunctions.setDisplayMessage(null)
+          }, 5000)        
+        })
+
         personservice.getPersons()
           .then(initPersons => {
             setFunctions.setPersons(initPersons)
           })
+         
+        setFunctions.setDisplayMessage(`${newObject.name} updated`)
+        setFunctions.setErrorCode(null)
+        setTimeout(() => {
+          setFunctions.setDisplayMessage(null)
+        }, 5000) 
       }
     }
 
@@ -44,7 +101,16 @@ const PersonForm = ({appStates, handlerFunctions, setFunctions}) => {
         .then(addedPerson => {
           setFunctions.setPersons(appStates.persons.concat(addedPerson))
         })
-      
+        .catch(error => {
+          setFunctions.setDisplayMessage(`adding ${personObject.name} failed`)
+          setFunctions.setErrorCode(error)
+        })
+
+      setFunctions.setDisplayMessage(`added ${personObject.name}`)
+      setFunctions.setErrorCode(null)
+      setTimeout(() => {
+        setFunctions.setDisplayMessage(null)
+      }, 5000) 
       setFunctions.setNewName('')
       setFunctions.setNewNumber('')
     }
@@ -66,26 +132,39 @@ const PersonForm = ({appStates, handlerFunctions, setFunctions}) => {
   )
 }
 
-const removePerson = (person, setPersons) => {
+const removePerson = (person, setFunctions) => {
   const res = window.confirm(`Delete ${person.name}`)
   if (res){
     personservice
-      .deletePerson(person.id)   
+      .deletePerson(person.id)
+      .catch(error => {
+        setFunctions.setDisplayMessage(  `Information of  ${person.name} has allready been removed from server`)
+        setFunctions.setErrorCode(error)
+        setTimeout(() => {
+          setFunctions.setDisplayMessage(null)
+        }, 5000)        
+      })  
     personservice
       .getPersons()
       .then(initpersons => {
-      setPersons(initpersons)
+        setFunctions.setPersons(initpersons)
       })
+
+    setFunctions.setDisplayMessage(`deleted ${person.name}`)
+    setFunctions.setErrorCode(null)
+    setTimeout(() => {
+      setFunctions.setDisplayMessage(null)
+    }, 5000) 
   }
 } 
 
-const Persons = ({persons, filterName, setFunctions}) => {
-  const namesToShow = persons.filter(
-    p => p.name.toLowerCase().includes(filterName.toLowerCase()))
+const Persons = ({appStates, setFunctions}) => {
+  const namesToShow = appStates.persons.filter(
+    p => p.name.toLowerCase().includes(appStates.filterName.toLowerCase()))
   return (
     namesToShow.map(p => 
       <div key={p.name}>
-        {p.name} {p.number} <button onClick= {() => removePerson(p, setFunctions.setPersons)}> delete </button>
+        {p.name} {p.number} <button onClick= {() => removePerson(p, setFunctions, appStates)}> delete </button>
       </div>)
     )
 }
@@ -104,6 +183,8 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filterName, setFilterName] = useState('')
+  const [displayMessage, setDisplayMessage] = useState(null)
+  const [errorCode, setErrorCode] = useState(null)
    
   const nameChangeHandler = (event) => {
     setNewName(event.target.value)
@@ -114,13 +195,14 @@ const App = () => {
   const filterChangeHandler = (event) => {
     setFilterName(event.target.value)
   }
-  const setFunctions = {setPersons, setNewName, setNewNumber, setFilterName}
+  const setFunctions = {setPersons, setNewName, setNewNumber, setFilterName, setDisplayMessage, setErrorCode}
   const handlerFunctions = {nameChangeHandler, numberChangeHandler, filterChangeHandler}
-  const appStates = {persons, newName, newNumber, filterName}
+  const appStates = {persons, newName, newNumber, filterName, displayMessage, errorCode}
 
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification displayMessage = {displayMessage} errorCode= {errorCode} />
       <Filter changeHandler = {filterChangeHandler} />
       <h3>Add a new</h3>
       <PersonForm 
@@ -129,7 +211,7 @@ const App = () => {
         setFunctions= {setFunctions}
       />
       <h3>Numbers</h3>
-        <Persons persons = {persons} filterName = {filterName} setFunctions= {setFunctions} />
+        <Persons appStates= {appStates} setFunctions= {setFunctions} />
     </div>
   )
 }
