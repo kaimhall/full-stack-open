@@ -2,6 +2,6 @@ POST http://localhost:3001/api/notes
 Content-Type: application/json
 
 {
-    "content": "this is third post request try. hoping..",
+    "content": "testing body functioning for logger",
     "important": true
 }
