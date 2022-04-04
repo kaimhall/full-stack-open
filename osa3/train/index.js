@@ -1,8 +1,10 @@
-const  response = require('express')
-const { json } = require('express')
 const express = require('express')
 const app = express()
+
 var morgan = require('morgan')
+
+const cors = require('cors')
+app.use(cors())
 
 const requestLogger = (req, res, next) => {
   console.log('Method:', req.method)
