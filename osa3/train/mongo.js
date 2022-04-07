@@ -1,9 +1,14 @@
 const mongoose = require('mongoose')
+
+require('dotenv').config()
+const password = process.env.password
+console.log(password)
+
 if (process.argv.length < 3) {
     console.log('give password as argument')
     process.exit(1)
 }
-const password = process.argv[2]
+//const password = process.argv[2]
 
 const url = `mongodb+srv://kaimhall:${password}@cluster0.qmjnq.mongodb.net/noteApp?retryWrites=true&w=majority`
 
