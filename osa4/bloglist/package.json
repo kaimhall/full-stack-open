@@ -4,9 +4,11 @@
   "description": "bloglist app for uni project",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --verbose",
     "start": "node index.js",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix --ext .js,.jsx ."
   },
   "repository": {
     "type": "git",
@@ -27,6 +29,11 @@
     "mongoose": "^6.3.0"
   },
   "devDependencies": {
+    "eslint": "^8.13.0",
+    "jest": "^27.5.1",
     "nodemon": "^2.0.15"
+  },
+  "jest": {
+    "testEnvironment": "node"
   }
 }
