@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 const dummy = (blogs) => {
   return blogs.length === 0
     ? 1
@@ -12,7 +13,23 @@ const totalLikes = (likes) => {
   return likes.reduce(reducer, 0)/ likes.length
 }
 
+const favoriteBlog = (blogs) => {
+  const getMax = (x,y) => {
+    return x >= y ? x : y 
+  }
+  const max = blogs
+    .map((elem) => elem.likes)
+    .reduce(getMax, -Infinity)
+  
+  const match = blogs
+    .filter((elem) => elem.likes == max)
+    .map(({_id, url, __v, ...rest}) => rest)
+  
+  return match[0]
+}
+
 module.exports = {
   dummy,
-  totalLikes
+  totalLikes,
+  favoriteBlog
 } 
