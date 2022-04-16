@@ -28,6 +28,18 @@ const favoriteBlog = (blogs) => {
   return match[0]
 }
 
+const mostBlogs = (blog) => {
+  const post_amount = (nameset, name) => {
+    if (name in nameset) {
+      nameset[name] ++
+    }
+    else {
+      nameset[name] = 1
+    }
+    return nameset
+  }
+}
+
 module.exports = {
   dummy,
   totalLikes,
