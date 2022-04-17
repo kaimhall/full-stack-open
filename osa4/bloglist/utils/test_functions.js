@@ -38,6 +38,10 @@ const mostBlogs = (blog) => {
     }
     return nameset
   }
+
+  const authors = blog.map((elem) => elem.author)
+    .reduce(post_amount, {})
+
 }
 
 module.exports = {
