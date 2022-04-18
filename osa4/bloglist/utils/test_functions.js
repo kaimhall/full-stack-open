@@ -1,4 +1,9 @@
+/* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
+
+const { maxBy } = require('lodash')
+const _ = require('lodash')
+
 const dummy = (blogs) => {
   return blogs.length === 0
     ? 1
@@ -29,23 +34,26 @@ const favoriteBlog = (blogs) => {
 }
 
 const mostBlogs = (blog) => {
-  const post_amount = (nameset, name) => {
-    if (name in nameset) {
-      nameset[name] ++
-    }
-    else {
-      nameset[name] = 1
-    }
-    return nameset
-  }
+  const authors = _.countBy(blog.map((o) => o.author))
+  author_list = _.map(authors, function (k, v) {return { 'author':v, 'blogs':k}
+  })
+  return _.maxBy(author_list, 'blogs')
+}
 
-  const authors = blog.map((elem) => elem.author)
-    .reduce(post_amount, {})
+const mostLikes = (blog) => {
+  const author_likes = 
+  _.chain(blog)
+    .groupBy('author') // list common writers
+    .map((obj, key) => ({'author': key, 'likes': _.sumBy(obj, 'likes')})).value()
+  return maxBy(author_likes, 'likes')
+
 
 }
 
 module.exports = {
   dummy,
   totalLikes,
-  favoriteBlog
+  favoriteBlog,
+  mostBlogs,
+  mostLikes
 } 
