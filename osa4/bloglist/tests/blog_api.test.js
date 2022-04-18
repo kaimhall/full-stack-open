@@ -92,6 +92,28 @@ describe('server functionality', () => {
       .send(newBlog)
       .expect(400)
   })
+
+  test('can update note', async () => {
+    
+    const updatedBlog = {
+      title: 'Test tryouts',
+      author: 'Kai Mikael',
+      url: 'https://notsogood.atthis/',
+      likes: 1
+    }
+
+    const startBlogs = await blogsInDB()
+    const toUpdate = startBlogs[0]
+
+    await api
+      .put(`/api/blogs/${toUpdate.id}`)
+      .send(updatedBlog)
+      .expect(200)
+
+    const endBlogs = await blogsInDB()
+    expect(endBlogs[0]).not.toEqual(startBlogs[0])
+    expect(_.find(endBlogs, ['title','Test tryouts'])).toBeDefined()
+  })
 })
 
 afterAll(() => {
