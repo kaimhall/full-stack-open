@@ -68,7 +68,7 @@ describe('server functionality', () => {
     const newBlog = {
       title: 'find this one',
       author: 'kai m. hall',
-      url: 'www.not.going.to happen'
+      url: 'www.not.goingto.happen'
     }
 
     await api
@@ -78,8 +78,19 @@ describe('server functionality', () => {
       .expect('Content-Type', /application\/json/)
     
     const endBlogs = await blogsInDB()
-    expect(_.find(endBlogs, ['title','find this one']).likes).toBe(0)
-    
+    expect(_.find(endBlogs, ['title','find this one']).likes).toBe(0) 
+  })
+
+  test('can not add invalid blog', async () => {
+    const newBlog = {
+      author: 'kai m. hall',
+      likes: 100
+    }
+
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(400)
   })
 })
 

@@ -6,10 +6,16 @@ postRouter.get('/', async (request, response) => {
   response.json(blog)
 })
 
-postRouter.post('/', async (request, response) => {
+postRouter.post('/', async (request, response, next) => {
   const blog = new Blog(request.body)
-  const savedBlog = await blog.save()
-  response.status(201).json(savedBlog)
+  try {
+    const savedBlog = await blog.save()
+    response.status(201).json(savedBlog)  
+  }
+  catch( exception) {
+    response.status(400)
+    next(exception)
+  }
 })
 
 postRouter.delete('/:id', async (request, response) => {
