@@ -26,8 +26,7 @@ describe('response is correct', () => {
     expect(result.body[0].id).toBeDefined()
   })
 })
-describe('server functionality works', () => { 
-  
+describe('server functionality', () => { 
   test('a blog can be added', async () => {  
     const newBlog = {
       title: 'postRouter module handles routes for app',
@@ -45,6 +44,22 @@ describe('server functionality works', () => {
 
     const content = endBlogs.map((blog) => blog.title)
     expect(content).toContain('postRouter module handles routes for app') 
+  })
+
+  test('a blog can be deleted', async () => {
+    const startBlogs = await blogsInDB()
+    const toDelete = startBlogs[0]
+    
+    await api
+      .delete(`/api/blogs/${toDelete.id}`)
+      .expect(204)
+
+    const endBlogs = await blogsInDB()
+    expect(endBlogs).toHaveLength(
+      initBlogs.length - 1
+    )
+    const title = endBlogs.map((blog) => blog.title)
+    expect(title).not.toContain(toDelete.title)
   })
 })
 

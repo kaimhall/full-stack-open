@@ -1,5 +1,5 @@
 const postRouter = require('express').Router() //import router..
-const Blog = require('../models/blog') // and blog model.
+const Blog = require('../models/blog') // and mongoose model.
 
 postRouter.get('/', async (request, response) => {
   const blog = await Blog.find({})
@@ -12,4 +12,8 @@ postRouter.post('/', async (request, response) => {
   response.status(201).json(savedBlog)
 })
 
+postRouter.delete('/:id', async (request, response) => {
+  await Blog.findByIdAndRemove(request.params.id)
+  response.status(204).end()
+})
 module.exports = postRouter
