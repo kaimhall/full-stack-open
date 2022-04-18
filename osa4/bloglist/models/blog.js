@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+mongoose.set('setDefaultsOnInsert', true)
 
 const blogSchema = mongoose.Schema({
   title: String,

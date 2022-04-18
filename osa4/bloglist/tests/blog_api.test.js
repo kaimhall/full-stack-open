@@ -5,6 +5,7 @@ const api = supertest(app)
 const Blog = require('../models/blog')
 const initBlogs = require('./test_helper').blog
 const blogsInDB = require('./test_helper').blogsInDb
+const _ = require('lodash')
 
 beforeEach( async () => {
   await Blog.deleteMany({})
@@ -26,7 +27,8 @@ describe('response is correct', () => {
     expect(result.body[0].id).toBeDefined()
   })
 })
-describe('server functionality', () => { 
+describe('server functionality', () => {
+
   test('a blog can be added', async () => {  
     const newBlog = {
       title: 'postRouter module handles routes for app',
@@ -60,6 +62,24 @@ describe('server functionality', () => {
     )
     const title = endBlogs.map((blog) => blog.title)
     expect(title).not.toContain(toDelete.title)
+  })
+
+  test('likes have no value', async () => {
+    const newBlog = {
+      title: 'find this one',
+      author: 'kai m. hall',
+      url: 'www.not.going.to happen'
+    }
+
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+    
+    const endBlogs = await blogsInDB()
+    expect(_.find(endBlogs, ['title','find this one']).likes).toBe(0)
+    
   })
 })
 
