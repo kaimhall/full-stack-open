@@ -1,9 +1,11 @@
 POST http://localhost:3003/api/blogs
-Content-Type: application/json 
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImthaWhhbGwiLCJpZCI6IjYyNWViN2VkNjhiM2E4NGRhMDkzMzhjYyIsImlhdCI6MTY1MDM3NDc0NiwiZXhwIjoxNjUwMzc4MzQ2fQ.LduwF65acg1KtIkXHJRVNK8I8wImnIIJeSvBGlaYPP4
 
 {
-  "title": "this is my third, and final, blog post",
-  "author": "kaimhall",
-  "url": "www.blogpost.net",
-  "likes": "100"
+  "title": "I'll try to post some shit ",
+  "author": "theo",
+  "url": "http://hypertextdance.org",
+  "likes": "5",
+  "userId": "625ea4a39c48b3b0a8004b07"
 }
