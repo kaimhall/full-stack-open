@@ -3,7 +3,7 @@ Content-Type: application/json
 Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImxvZ2ludXNyIiwiaWQiOiI2MjVmYzIzNDZmZjY3OThhZWUxMTlhYjEiLCJpYXQiOjE2NTA0NDY1MDksImV4cCI6MTY1MDQ1MDEwOX0.4mk9GbDClm50ZquGH1HSvbAz8mrEiAheHs48h0WVMuc
 
 {
-  "title": "loginusr tries to post without id",
+  "title": "13",
   "author": "loginusr",
   "url": "http://needtologin.org",
   "likes": "5"

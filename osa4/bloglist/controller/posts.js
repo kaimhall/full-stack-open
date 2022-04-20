@@ -3,14 +3,6 @@ const postRouter = require('express').Router() //import router..
 const Blog = require('../models/blog') // and mongoose model..
 const User = require('../models/user') //and user model
 
-const getTokenFrom = request => {
-  const authorization = request.get('authorization')
-  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
-    return authorization.substring(7)
-  }
-  return null
-}
-
 postRouter.get('/', async (request, response) => {
   const blog = await Blog.find({}).populate('user', '-blogs')
   response.json(blog)
@@ -19,9 +11,8 @@ postRouter.get('/', async (request, response) => {
 postRouter.post('/', async (request, response, next) => {
   const body = request.body
 
-  const token = getTokenFrom(request)
-  const decodedToken = jwt.verify(token, process.env.SECRET)
-  if (!token || !decodedToken.id) {
+  const decodedToken = jwt.verify(request.token, process.env.SECRET)
+  if (!decodedToken.id) {
     return response.status(401).json({ error: 'token missing or invalid' })
   }
   const user = await User.findById(decodedToken.id)
