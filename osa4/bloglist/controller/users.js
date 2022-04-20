@@ -4,17 +4,16 @@ const User = require('../models/user')
 
 usersRouter.get('/', async (request, response) => {
   const users = await User
-    .find({}).populate('blogs', { title:1})
+    .find({}).populate('blogs','-likes -user')
   response.json(users)
 })
 
 usersRouter.post('/', async (request, response) => {
   const { username, name, password } = request.body
 
-  const existingUser = await User.findOne({ username })
-  if (existingUser) {
+  if (password === null || password.length < 3) {
     return response.status(400).json({
-      error: 'username must be unique'
+      error: 'password must be 3 characters long.'
     })
   }
 
@@ -26,7 +25,7 @@ usersRouter.post('/', async (request, response) => {
     name,
     passwordHash,
   })
-
+  
   const savedUser = await user.save()
   response.status(201).json(savedUser)
 })

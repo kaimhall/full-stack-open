@@ -13,7 +13,6 @@ describe('when there is initially one user at db', () => {
 
     const passwordHash = await bcrypt.hash('sekret', 10)
     const user = new User({ username: 'root', passwordHash })
-
     await user.save()
   })
 
@@ -21,9 +20,9 @@ describe('when there is initially one user at db', () => {
     const usersAtStart = await helper.usersInDb()
 
     const newUser = {
-      username: 'kaimhall',
-      name: 'kai mikael hall',
-      password: 'kaimhall',
+      username: 'superuser',
+      name: 'superuser',
+      password: 'superuser',
     }
 
     await api
@@ -39,22 +38,57 @@ describe('when there is initially one user at db', () => {
     expect(usernames).toContain(newUser.username)
   })
 
-  test('creation fails with proper statuscode and message if username already taken', async () => {
+  test('fails if username not unique', async () => {
     const usersAtStart = await helper.usersInDb()
-
+    
     const newUser = {
-      username: 'theohall',
-      name: 'theo',
-      password: 'theo',
+      username: 'root',
+      name: 'root',
+      password: 'root'
     }
-
-    const result = await api
+    await api
       .post('/api/users')
       .send(newUser)
       .expect(400)
       .expect('Content-Type', /application\/json/)
+    
+    const usersAtEnd = await helper.usersInDb()
+    expect(usersAtEnd).toHaveLength(usersAtStart.length) 
+  })
+})
 
-    expect(result.body.error).toContain('username must be unique')
+describe('test for username and password validity', () => {
+  
+  test('fails if no username, or it is less than 3 characters', async () => {
+    const usersAtStart = await helper.usersInDb()
+    
+    const newUser = {
+      username: '',
+      name: 'superuser',
+      password: 'superuser'
+    }
+    await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+  
+    const usersAtEnd = await helper.usersInDb()
+    expect(usersAtEnd).toHaveLength(usersAtStart.length) 
+  })
+  test('fail if no password, or it is less than 3 characters' , async () => {
+    const usersAtStart = await helper.usersInDb()
+
+    const newUser = {
+      username: 'mike',
+      name: 'mike',
+      password: ''
+    }
+    await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
 
     const usersAtEnd = await helper.usersInDb()
     expect(usersAtEnd).toHaveLength(usersAtStart.length)

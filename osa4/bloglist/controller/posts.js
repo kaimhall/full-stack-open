@@ -12,7 +12,7 @@ const getTokenFrom = request => {
 }
 
 postRouter.get('/', async (request, response) => {
-  const blog = await Blog.find({})
+  const blog = await Blog.find({}).populate('user', '-blogs')
   response.json(blog)
 })
 
@@ -32,10 +32,10 @@ postRouter.post('/', async (request, response, next) => {
     url:body.url,
     user: user._id
   })
-  
+  console.log(blog)
+
   try {
     const savedBlog = await blog.save()
-    user.blogs = user.blogs.concat(savedBlog._id)
     await user.save()
 
     response.json(savedBlog)
@@ -64,4 +64,10 @@ postRouter.delete('/:id', async (request, response) => {
   await Blog.findByIdAndRemove(request.params.id)
   response.status(204).end()
 })
+
+postRouter.delete('/', async (request, response) => {
+  await Blog.deleteMany({})
+  response.status(204).end()
+})
+
 module.exports = postRouter
