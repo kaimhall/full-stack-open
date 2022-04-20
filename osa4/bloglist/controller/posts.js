@@ -9,6 +9,7 @@ postRouter.get('/', async (request, response) => {
 
 postRouter.post('/', async (request, response, next) => {
   const body = request.body
+  console.log(body.title)
   const decodedToken = jwt.verify(request.token, process.env.SECRET)
   if (!decodedToken.id) {
     return response.status(401).json({ error: 'token missing or invalid' })

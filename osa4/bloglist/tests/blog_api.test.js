@@ -52,6 +52,7 @@ describe('server functionality', () => {
 
     await api
       .post('/api/blogs')
+      .set('Content_Type', 'application/json')
       .set('Authorization', token)
       .send(newBlog)
       .expect(201)
