@@ -1,10 +1,10 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImthaSIsImlkIjoiNjI1ZmUwYjllMjEzY2YzYjBhNTdmNTIwIiwiaWF0IjoxNjUwNDU4NDU4LCJleHAiOjE2NTA0NjIwNTh9.QkZjx_Sbzz3Py-ECVFZ2nlA0aRks1kEAjO0zkzMujgk
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpZCI6IjYyNjA0NjRlMzZhNzE4MTE1ZTAyMTYyYiIsImlhdCI6MTY1MDQ3NjYzN30.lUDN9IAYYQYboQIa0m9zei7ZURnX6Tb_b7OuPzzNSco
 
 {
-  "title": "6.",
-  "author": "kai",
-  "url": "http://needtologin.org",
-  "likes": "5"
+  "title": "test",
+  "author": "test",
+  "url": "test",
+  "likes": "0"
 }

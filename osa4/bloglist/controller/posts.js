@@ -25,7 +25,8 @@ postRouter.post('/', async (request, response, next) => {
   console.log(blog)
 
   try {
-    const savedBlog = await blog.save()
+    const savedBlog = await blog.save(blog)
+    user.blogs = user.blogs.concat(savedBlog)
     await user.save()
 
     response.json(savedBlog)
@@ -65,7 +66,6 @@ postRouter.delete('/:id', async (request, response) => {
   }
   
 })
-
 postRouter.delete('/', async (request, response) => {
   await Blog.deleteMany({})
   response.status(204).end()
