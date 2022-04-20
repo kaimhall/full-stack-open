@@ -1,3 +1,4 @@
+require('dotenv').config()
 require('mongoose')
 const Blog = require('../models/blog')
 const User = require('../models/user')
@@ -51,15 +52,23 @@ const blog = [
     __v: 0
   }  
 ]
+const token = process.env.TOKEN
 
 const blogsInDb = async () => {
-  const blogs = await Blog.find({})
+  const blogs = await Blog
+    .find({})
+    .set('Authorization', token)
+
   return blogs.map(b => b.toJSON())
 }
 const usersInDb = async () => {
-  const users = await User.find({})
+  const users = await User
+    .find({})
+    .set('Authorization', token)
+  
   return users.map(u => u.toJSON())
 }
+
 module.exports = {
   blog,
   blogsInDb,

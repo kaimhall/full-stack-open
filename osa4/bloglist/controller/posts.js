@@ -9,7 +9,6 @@ postRouter.get('/', async (request, response) => {
 
 postRouter.post('/', async (request, response, next) => {
   const body = request.body
-  console.log(request.user)
   const decodedToken = jwt.verify(request.token, process.env.SECRET)
   if (!decodedToken.id) {
     return response.status(401).json({ error: 'token missing or invalid' })
@@ -22,7 +21,6 @@ postRouter.post('/', async (request, response, next) => {
     url:body.url,
     user: user._id
   })
-  console.log(blog)
 
   try {
     const savedBlog = await blog.save(blog)
