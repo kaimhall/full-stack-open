@@ -1,11 +1,10 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImxvZ2ludXNyIiwiaWQiOiI2MjVmYzIzNDZmZjY3OThhZWUxMTlhYjEiLCJpYXQiOjE2NTA0NDI4MTAsImV4cCI6MTY1MDQ0NjQxMH0.lW5Ee6YcrGtiubVSFh6TOw5G29GNe-LNTNvfpqa8HkQ
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImxvZ2ludXNyIiwiaWQiOiI2MjVmYzIzNDZmZjY3OThhZWUxMTlhYjEiLCJpYXQiOjE2NTA0NDY1MDksImV4cCI6MTY1MDQ1MDEwOX0.4mk9GbDClm50ZquGH1HSvbAz8mrEiAheHs48h0WVMuc
 
 {
-  "title": "loginusr is posting for fifth time",
+  "title": "loginusr tries to post without id",
   "author": "loginusr",
   "url": "http://needtologin.org",
-  "likes": "5",
-  "userId": "625fc2346ff6798aee119ab1"
+  "likes": "5"
 }
