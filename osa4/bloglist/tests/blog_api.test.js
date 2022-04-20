@@ -28,6 +28,8 @@ describe('response is correct', () => {
   })
 })
 describe('server functionality', () => {
+  
+  const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.      eyJ1c2VybmFtZSI6InRlc3RfdXNyIiwiaWQiOiI2MjYwMTcyOGE4NTUzOTg0MmU3MmUyYTAiLCJpYXQiOjE2NTA0NjQ2MDR9.0_rx3JIa9wK7A1sVCqbug8FmrnHhcFTLi3Uf0XUp_y8'
 
   test('a blog can be added', async () => {  
     const newBlog = {
@@ -38,6 +40,7 @@ describe('server functionality', () => {
     }
     await api
       .post('/api/blogs')
+      .set('Authorization', 'Bearer ' + token)
       .send(newBlog)
       .expect(201)
 
