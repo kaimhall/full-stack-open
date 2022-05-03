@@ -1,0 +1,23 @@
+morgan.token('req-body', (req, res) => {
+  return JSON.stringify(req.body)
+})
+app.use(morgan(':method :url status :res[content-length] - :response-time ms :req-body'))
+
+app post conditions:
+  /*
+    if(persons.map(p => p.name).find(n => n === name)){
+        return response.status(400).json({
+            error:'name must be unique'
+        })
+    }
+    else if(!request.body.name){
+        return response.status(400).json({
+            error:'name is empty'
+        })
+    }
+    else if(!request.body.number){
+        return response.status(400).json({
+            error:'number is empty'
+        })
+    }
+    */  
