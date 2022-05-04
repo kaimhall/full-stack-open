@@ -2,12 +2,14 @@ import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import Notification from './components/notification'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('') 
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
+  const [notification, setNotification] = useState(null)
 
   const [errorMessage, setErrorMessage] = useState(null)
   const [title, setTitle] = useState('')
@@ -28,6 +30,13 @@ const App = () => {
     }
   }, [])
 
+  const notify = (message, type= 'info') => {
+    setNotification({ message, type })
+    setTimeout( () => {
+      setNotification(null)
+    }, 3000)
+  }
+
   const loginHandler = async (event) => {
     event.preventDefault()
     try {
@@ -44,9 +53,7 @@ const App = () => {
         setPassword('') 
     } catch (exception) {
       setErrorMessage('wrong username or password')
-      setTimeout( () => {
-        setErrorMessage(null)
-      }, 2000)
+      notify(errorMessage,'alert')
     }
   }
 
@@ -79,9 +86,9 @@ const App = () => {
 
   const logoutHandler = (event) => {
     event.preventDefault()
-    window.localStorage.removeItem('loggedblogListUser')
-    setUser(null)
     window.localStorage.clear()
+    setUser(null)
+    //window.localStorage.removeItem('loggedblogListUser')
   }
 
   const blogForm = () => (
@@ -114,6 +121,7 @@ const App = () => {
     }
     blogService.setToken(user.token)
     blogService.create(newObject)
+    notify(`a new blog ${newObject.title} by ${newObject.author} added`)
   }
 
   const postForm = () => (
@@ -154,6 +162,7 @@ const App = () => {
 
   return (
     <div>
+      <Notification notification={notification} />
       {user === null && loginForm()}
       {user !== null && blogForm()}
       {user !== null && postForm()}
