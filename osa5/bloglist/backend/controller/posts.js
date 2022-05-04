@@ -14,6 +14,7 @@ postRouter.get('/', async (request, response) => {
 })
 
 postRouter.post('/', async (request, response) => {
+  console.log(request.user)
   if (!request.user) {
     return response.status(401).json({ error: 'token missing or invalid' })
   }
