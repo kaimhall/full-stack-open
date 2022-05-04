@@ -110,8 +110,7 @@ const App = () => {
     const newObject = {
       title: title,
       author: author,
-      url: url,
-      user: user
+      url: url
     }
     blogService.setToken(user.token)
     blogService.create(newObject)
