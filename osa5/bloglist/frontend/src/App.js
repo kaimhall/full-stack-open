@@ -49,8 +49,8 @@ const App = () => {
       blogService.setToken(user.token) 
 
       setUser(user)
-        setUsername('')
-        setPassword('') 
+      setUsername('')
+      setPassword('') 
     } catch (exception) {
       setErrorMessage('wrong username or password')
       notify(errorMessage,'alert')
@@ -60,6 +60,7 @@ const App = () => {
   const loginForm = () => (
     <div>
       <h2>Log in to application</h2>
+      <Notification notification={notification} />
       <form onSubmit={loginHandler}>
           <div>
             username
@@ -91,24 +92,7 @@ const App = () => {
     //window.localStorage.removeItem('loggedblogListUser')
   }
 
-  const blogForm = () => (
-    <div>
-        <h2>blogs</h2>
-
-        <form onSubmit = {logoutHandler} >
-          <p>{user.name} logged in
-            <button type="submit"> logout</button>
-          </p>
-        </form>
-
-        {blogs.map( blog =>
-          <Blog key={blog.id} blog={blog} />
-        )}
-
-    </div>
-  )
-
-  const postHandler = (event) => {
+  const postHandler = async (event) => {
     event.preventDefault()
     setTitle(title)
     setAuthor(author)
@@ -120,12 +104,25 @@ const App = () => {
       url: url
     }
     blogService.setToken(user.token)
-    blogService.create(newObject)
+    await blogService.create(newObject)
+    
     notify(`a new blog ${newObject.title} by ${newObject.author} added`)
+    
+    setTitle('')
+    setAuthor('')
+    setUrl('')
   }
 
   const postForm = () => (
     <div>
+      <h2>blogs</h2>
+      <Notification notification={notification} />
+      
+      <form onSubmit = {logoutHandler} >
+        <p>{user.name} logged in
+          <button type="submit"> logout</button>
+        </p>
+      </form>
       <h2>create new</h2>
       <form onSubmit = {postHandler}>
         <div>
@@ -157,14 +154,16 @@ const App = () => {
         </div>
         <button type="submit">create</button>
       </form>
+      
+      {blogs.map( blog =>
+          <Blog key={blog.id} blog={blog} />
+      )}
     </div>
   )
 
   return (
     <div>
-      <Notification notification={notification} />
       {user === null && loginForm()}
-      {user !== null && blogForm()}
       {user !== null && postForm()}
     </div>
   )
