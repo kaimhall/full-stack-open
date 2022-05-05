@@ -5,6 +5,7 @@ import LoginForm from './components/LoginForm'
 import Toggle from './components/Toggle'
 import PostForm from './components/PostForm'
 import Blog from './components/Blog'
+import Notification from './components/notification'
 
 
 const App = () => {
@@ -14,6 +15,9 @@ const App = () => {
   const [password, setPassword] = useState('')
 
   const [errorMessage, setErrorMessage] = useState(null)
+  const [notification, setNotification] = useState(null)
+
+  
   const blogFormRef = useRef()
 
   useEffect(() => {
@@ -30,13 +34,6 @@ const App = () => {
     }
   }, [])
 
- /*const notify = (message, type= 'info') => {
-    setNotification({ message, type })
-    setTimeout( () => {
-      setNotification(null)
-    }, 3000)
-  }
-*/
   const loginHandler = async (event) => {
     event.preventDefault()
     try {
@@ -51,9 +48,10 @@ const App = () => {
       setUser(user)
       setUsername('')
       setPassword('') 
-    } catch (exception) {
+    }
+    catch (exception) {
       setErrorMessage('wrong username or password')
-      //notify(errorMessage,'alert')
+      notify( errorMessage, 'alert')
     }
   }
   const logoutHandler = (event) => {
@@ -62,27 +60,38 @@ const App = () => {
     setUser(null)
     //window.localStorage.removeItem('loggedblogListUser')
   }
+
+  const notify = (message, type= 'info') => {
+    setNotification({ message, type })
+    setTimeout( () => {
+      setNotification(null)
+    }, 3000)
+  }
+
   const createPost = (newObject) => {
     blogFormRef.current.toggleVisibility()
     blogService.setToken(user.token)
     blogService.create(newObject)
+    notify(`a new blog ${newObject.title} by ${newObject.author} added`)
   }
 
   const loginForm = () => (
     <div>
-        <LoginForm
-          username = {username}
-          password = {password}
-          handleNameChange = {({target}) => setUsername(target.value)}
-          handlePasswordChange = {({target}) => setPassword(target.value)}
-          handleLogin = {loginHandler}
-        />
-      </div>
+      <Notification notification= {notification} />
+      <LoginForm
+        username = {username}
+        password = {password}
+        handleNameChange = {({target}) => setUsername(target.value)}
+        handlePasswordChange = {({target}) => setPassword(target.value)}
+        handleLogin = {loginHandler}
+      />
+    </div>
   )
 
   const postForm = () => (
     <div>
       <h1>Blogs</h1>
+      <Notification notification={notification} />
       <form onSubmit = {logoutHandler} >
         <p>
           {user.name} logged in

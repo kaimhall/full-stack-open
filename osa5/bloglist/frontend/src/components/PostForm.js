@@ -5,6 +5,9 @@ const PostForm = ({createPost}) => {
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
 
+
+  
+
   const postHandler = async (event) => {
     event.preventDefault()
     setTitle(title)
@@ -17,11 +20,10 @@ const PostForm = ({createPost}) => {
       url: url
     }
     createPost(newObject)
-    
+
     setTitle('')
     setAuthor('')
     setUrl('')
-    //notify(`a new blog ${newObject.title} by ${newObject.author} added`)
   }
 
   return (
