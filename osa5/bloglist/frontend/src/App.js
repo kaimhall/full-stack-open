@@ -9,12 +9,12 @@ import Blog from './components/Blog'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
+  const [user, setUser] = useState(null)
   const [username, setUsername] = useState('') 
   const [password, setPassword] = useState('')
-  const [user, setUser] = useState(null)
 
   const [errorMessage, setErrorMessage] = useState(null)
-  const noteFormRef = useRef()
+  const blogFormRef = useRef()
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -56,6 +56,17 @@ const App = () => {
       //notify(errorMessage,'alert')
     }
   }
+  const logoutHandler = (event) => {
+    event.preventDefault()
+    window.localStorage.clear()
+    setUser(null)
+    //window.localStorage.removeItem('loggedblogListUser')
+  }
+  const createPost = (newObject) => {
+    blogFormRef.current.toggleVisibility()
+    blogService.setToken(user.token)
+    blogService.create(newObject)
+  }
 
   const loginForm = () => (
     <div>
@@ -69,27 +80,17 @@ const App = () => {
       </div>
   )
 
-  const logoutHandler = (event) => {
-    event.preventDefault()
-    window.localStorage.clear()
-    setUser(null)
-    //window.localStorage.removeItem('loggedblogListUser')
-  }
-  const createPost = (newObject) => {
-    blogService.setToken(user.token)
-    blogService.create(newObject)
-  }
-
   const postForm = () => (
     <div>
       <h1>Blogs</h1>
       <form onSubmit = {logoutHandler} >
-        <p>{user.name} logged in
+        <p>
+          {user.name} logged in
           <button type="submit"> logout</button>
         </p>
       </form>
 
-      <Toggle buttonLabel='new note'> 
+      <Toggle buttonLabel='new note' ref= {blogFormRef}> 
         <PostForm createPost= {createPost}/>
       </Toggle>
 
