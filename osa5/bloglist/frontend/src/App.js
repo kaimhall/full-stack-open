@@ -1,20 +1,20 @@
-import { useState, useEffect } from 'react'
-import Blog from './components/Blog'
+import {useState, useEffect, useRef } from 'react'
 import blogService from './services/blogs'
 import loginService from './services/login'
-import Notification from './components/notification'
+import LoginForm from './components/LoginForm'
+import Toggle from './components/Toggle'
+import PostForm from './components/PostForm'
+import Blog from './components/Blog'
+
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('') 
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [notification, setNotification] = useState(null)
 
   const [errorMessage, setErrorMessage] = useState(null)
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
+  const noteFormRef = useRef()
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -30,13 +30,13 @@ const App = () => {
     }
   }, [])
 
-  const notify = (message, type= 'info') => {
+ /*const notify = (message, type= 'info') => {
     setNotification({ message, type })
     setTimeout( () => {
       setNotification(null)
     }, 3000)
   }
-
+*/
   const loginHandler = async (event) => {
     event.preventDefault()
     try {
@@ -53,36 +53,20 @@ const App = () => {
       setPassword('') 
     } catch (exception) {
       setErrorMessage('wrong username or password')
-      notify(errorMessage,'alert')
+      //notify(errorMessage,'alert')
     }
   }
 
   const loginForm = () => (
     <div>
-      <h2>Log in to application</h2>
-      <Notification notification={notification} />
-      <form onSubmit={loginHandler}>
-          <div>
-            username
-              <input
-              type="text"
-              value={username}
-              name="Username"
-              onChange={({ target }) => setUsername(target.value)}
-              />
-          </div>
-          <div>
-          password
-            <input
-            type="password"
-            value={password}
-            name="Password"
-            onChange={({ target }) => setPassword(target.value)}
-          />
-        </div>
-        <button type="submit">login</button>
-      </form>
-    </div>
+        <LoginForm
+          username = {username}
+          password = {password}
+          handleNameChange = {({target}) => setUsername(target.value)}
+          handlePasswordChange = {({target}) => setPassword(target.value)}
+          handleLogin = {loginHandler}
+        />
+      </div>
   )
 
   const logoutHandler = (event) => {
@@ -91,72 +75,26 @@ const App = () => {
     setUser(null)
     //window.localStorage.removeItem('loggedblogListUser')
   }
-
-  const postHandler = async (event) => {
-    event.preventDefault()
-    setTitle(title)
-    setAuthor(author)
-    setUrl(url)
-    
-    const newObject = {
-      title: title,
-      author: author,
-      url: url
-    }
+  const createPost = (newObject) => {
     blogService.setToken(user.token)
-    await blogService.create(newObject)
-    
-    notify(`a new blog ${newObject.title} by ${newObject.author} added`)
-    
-    setTitle('')
-    setAuthor('')
-    setUrl('')
+    blogService.create(newObject)
   }
 
   const postForm = () => (
     <div>
-      <h2>blogs</h2>
-      <Notification notification={notification} />
-      
+      <h1>Blogs</h1>
       <form onSubmit = {logoutHandler} >
         <p>{user.name} logged in
           <button type="submit"> logout</button>
         </p>
       </form>
-      <h2>create new</h2>
-      <form onSubmit = {postHandler}>
-        <div>
-          title:
-          <input 
-          type= 'text'
-          value= {title}
-          name = 'title'
-          onChange = {({target}) => setTitle(target.value)}
-          />
-        </div>
-        <div>
-          author:
-          <input 
-          type= 'text'
-          value= {author}
-          name = 'author'
-          onChange = {({target}) => setAuthor(target.value)}
-          />
-        </div>
-        <div>
-          url:
-          <input 
-          type= 'text'
-          value= {url}
-          name = 'url'
-          onChange = {({target}) => setUrl(target.value)}
-          />
-        </div>
-        <button type="submit">create</button>
-      </form>
-      
+
+      <Toggle buttonLabel='new note'> 
+        <PostForm createPost= {createPost}/>
+      </Toggle>
+
       {blogs.map( blog =>
-          <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} />
       )}
     </div>
   )
