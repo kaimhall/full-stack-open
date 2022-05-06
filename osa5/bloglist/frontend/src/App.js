@@ -6,6 +6,7 @@ import Toggle from './components/Toggle'
 import PostForm from './components/PostForm'
 import Blog from './components/Blog'
 import Notification from './components/notification'
+import ToggleView from './components/ToggleView'
 
 
 const App = () => {
@@ -104,11 +105,13 @@ const App = () => {
       </Toggle>
 
       {blogs.map( blog =>
-        <Blog key={blog.id} blog={blog} />
+        <ToggleView>
+          <Blog key={blog.id} blog={blog}/>
+        </ToggleView>
       )}
+
     </div>
   )
-
   return (
     <div>
       {user === null && loginForm()}

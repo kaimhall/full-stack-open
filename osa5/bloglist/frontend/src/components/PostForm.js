@@ -5,9 +5,6 @@ const PostForm = ({createPost}) => {
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
 
-
-  
-
   const postHandler = async (event) => {
     event.preventDefault()
     setTitle(title)
