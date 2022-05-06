@@ -1,4 +1,4 @@
-import {useState, useEffect, useRef } from 'react'
+import {useState, useEffect, useRef} from 'react'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import LoginForm from './components/LoginForm'
@@ -20,6 +20,7 @@ const App = () => {
 
   
   const blogFormRef = useRef()
+  
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -74,6 +75,17 @@ const App = () => {
     blogService.setToken(user.token)
     blogService.create(newObject)
     notify(`a new blog ${newObject.title} by ${newObject.author} added`)
+    blogService.getAll()
+      .then(blogs => setBlogs( blogs )
+    ) 
+  }
+
+  const addLike = (newObject, id) => {
+    blogService.setToken(user.token)
+    blogService.update(newObject, id)
+    blogService.getAll()
+      .then(blogs => setBlogs( blogs )
+    )  
   }
 
   const loginForm = () => (
@@ -105,7 +117,7 @@ const App = () => {
       </Toggle>
 
       {blogs.map( blog =>
-        <ToggleView>
+        <ToggleView addLike={addLike}>
           <Blog key={blog.id} blog={blog}/>
         </ToggleView>
       )}

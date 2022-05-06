@@ -1,7 +1,7 @@
-import { useState } from 'react'
+import { useState} from 'react'
 
-const ToggleView = ({children}) => {
-  const {title, author, url, likes, user} = children.props.blog
+const ToggleView = ({children, addLike}) => {
+  const {title, author, url, likes, user, id} = children.props.blog
   const [blogView, setBlogView] = useState('hide')
 
   const blogStyle = {
@@ -20,6 +20,17 @@ const ToggleView = ({children}) => {
     setBlogView('hide')
   }
 
+  const createLike = () => {
+    const newObject = {
+      user: user.id,
+      likes: likes + 1,
+      author:author,
+      title:title,
+      url:url
+    }
+    addLike(newObject, id)
+  }
+
   if (blogView === 'hide') {
     return (
       <div style={blogStyle}>
@@ -32,9 +43,10 @@ const ToggleView = ({children}) => {
       <div style={blogStyle}>
          {title} {author} <button  onClick = {hideBlog}>hide</button> <br></br>
          {url}<br></br>
-         {likes} <button>like</button> <br></br>
+         {likes} <button onClick={createLike}>like</button> <br></br>
          {user.name}
       </div>
   )}
 } 
+
 export default ToggleView
