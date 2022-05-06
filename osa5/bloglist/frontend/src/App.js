@@ -100,7 +100,7 @@ const App = () => {
         </p>
       </form>
 
-      <Toggle buttonLabel='new note' ref= {blogFormRef}> 
+      <Toggle buttonLabel='create' ref= {blogFormRef}> 
         <PostForm createPost= {createPost}/>
       </Toggle>
 
