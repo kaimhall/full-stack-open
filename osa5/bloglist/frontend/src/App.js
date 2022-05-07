@@ -137,8 +137,8 @@ const App = () => {
       </Toggle>
 
       {blogs.map( blog =>
-        <ToggleView addLike={addLike} loggedUser={user} deletePost={deletePost} key= {user.id}>
-          <Blog key= {blog.id} blog={blog}/>
+        <ToggleView key= {blog.id} addLike={addLike} loggedUser={user} deletePost={deletePost}>
+          <Blog blog={blog}/>
         </ToggleView>
       )}
 
