@@ -33,14 +33,14 @@ const ToggleView = ({children, addLike}) => {
 
   if (blogView === 'hide') {
     return (
-      <div style={blogStyle}>
+      <div key = {id} style={blogStyle}>
         {title} {author} <button onClick = {viewBlog}>view</button>
       </div>
     )
   }
   else if (blogView === 'view'){
     return (
-      <div style={blogStyle}>
+      <div key={id} style={blogStyle}>
          {title} {author} <button  onClick = {hideBlog}>hide</button> <br></br>
          {url}<br></br>
          {likes} <button onClick={createLike}>like</button> <br></br>

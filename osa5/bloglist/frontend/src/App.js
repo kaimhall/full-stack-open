@@ -23,8 +23,13 @@ const App = () => {
   
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>
+    blogService.getAll().then(blogs => {
+      blogs.sort((a,b) => {
+        return  b.likes - a.likes 
+      })
       setBlogs( blogs )
+    }
+      
     )  
   }, [])
 
@@ -76,7 +81,11 @@ const App = () => {
     blogService.create(newObject)
     notify(`a new blog ${newObject.title} by ${newObject.author} added`)
     blogService.getAll()
-      .then(blogs => setBlogs( blogs )
+      .then(blogs => {
+        blogs.sort((a,b) => {
+          return  b.likes - a.likes 
+        })
+        setBlogs( blogs )}
     ) 
   }
 
@@ -84,7 +93,11 @@ const App = () => {
     blogService.setToken(user.token)
     blogService.update(newObject, id)
     blogService.getAll()
-      .then(blogs => setBlogs( blogs )
+      .then(blogs => {
+        blogs.sort((a,b) => {
+          return  b.likes - a.likes 
+        })
+        setBlogs( blogs )}
     )  
   }
 
