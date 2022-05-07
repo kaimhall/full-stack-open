@@ -1,4 +1,5 @@
 import { useState } from "react"
+import PropTypes from 'prop-types'
 
 const PostForm = ({createPost}) => {
   const [title, setTitle] = useState('')
@@ -58,5 +59,8 @@ const PostForm = ({createPost}) => {
       </form>
       </div>
     )}
-
+  
+    PostForm.propTypes = {
+      createPost: PropTypes.func.isRequired
+    }
   export default PostForm
