@@ -1,11 +1,11 @@
-import {useState} from 'react'
+import { useState } from 'react'
 import ToggleBtn from './ToggleBtn'
 
-const ToggleView = ({children, addLike, loggedUser, deletePost}) => {
-  
-  const {title, author, url, likes, user, id} = children.props.blog
+const ToggleView = ({ children, addLike, loggedUser, deletePost }) => {
+
+  const { title, author, url, likes, user, id } = children.props.blog
   const [blogView, setBlogView] = useState('hide')
-  
+
 
   const blogStyle = {
     paddingTop: 5,
@@ -13,11 +13,11 @@ const ToggleView = ({children, addLike, loggedUser, deletePost}) => {
     border: 'solid',
     borderWidth: 1,
     marginBottom: 5,
-  }  
+  }
   const viewBlog = () => {
     setBlogView('view')
   }
-  
+
   const hideBlog = () => {
     setBlogView('hide')
   }
@@ -50,16 +50,16 @@ const ToggleView = ({children, addLike, loggedUser, deletePost}) => {
   else if (blogView === 'view'){
     return (
       <div key={id} style={blogStyle}>
-         {title} {author} <button  onClick = {hideBlog}>hide</button> <br></br>
-         {url}<br></br>
-         {likes} <button onClick={createLike}>like</button> <br></br>
-         {user.name} <br></br>
-         
+        {title} {author} <button  onClick = {hideBlog}>hide</button> <br></br>
+        {url}<br></br>
+        {likes} <button onClick={createLike}>like</button> <br></br>
+        {user.name} <br></br>
+
         <ToggleBtn user= {user} loggedUser={loggedUser}>
           <button onClick = {removePost} >delete</button>
         </ToggleBtn>
       </div>
-  )}
-} 
+    )}
+}
 
 export default ToggleView

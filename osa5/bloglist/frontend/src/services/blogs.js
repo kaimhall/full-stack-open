@@ -10,7 +10,7 @@ const setToken = newToken => {
 const remove = async (id) => {
   const address = `${baseUrl}/${id}`
   const config = {
-    headers: {Authorization: token}
+    headers: { Authorization: token }
   }
   const response = await axios.delete(
     address,
@@ -26,7 +26,7 @@ const getAll = () => {
 
 const create = async newObject => {
   const config = {
-    headers: {Authorization: token}
+    headers: { Authorization: token }
   }
   const response = await axios.post(
     baseUrl,
@@ -38,9 +38,9 @@ const create = async newObject => {
 
 const update = async (newObject, id) => {
   const address = `${baseUrl}/${id}`
-  
+
   const config = {
-    headers: {Authorization: token}
+    headers: { Authorization: token }
   }
   const response = await axios.put(
     address,
@@ -50,5 +50,4 @@ const update = async (newObject, id) => {
   return response.data
 }
 
-// eslint-disable-next-line import/no-anonymous-default-export
 export default { getAll, create, update, setToken, remove }

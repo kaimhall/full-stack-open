@@ -4,11 +4,11 @@ const LoginForm = ({
   username,
   password,
   handleLogin,
-  }) => {
-    return (
-      <div>
-        <h2>Log in to application</h2>
-        <form onSubmit={handleLogin}>
+}) => {
+  return (
+    <div>
+      <h2>Log in to application</h2>
+      <form onSubmit={handleLogin}>
         <div>
           username
           <input
@@ -30,6 +30,6 @@ const LoginForm = ({
         <button type="submit">login</button>
       </form>
     </div>
-    )
-  }
-  export default LoginForm
+  )
+}
+export default LoginForm

@@ -1,4 +1,4 @@
-import {useState, useEffect, useRef} from 'react'
+import { useState, useEffect, useRef } from 'react'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import LoginForm from './components/LoginForm'
@@ -12,21 +12,21 @@ import ToggleView from './components/ToggleView'
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
-  const [username, setUsername] = useState('') 
+  const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
   const [errorMessage, setErrorMessage] = useState(null)
   const [notification, setNotification] = useState(null)
-  
+
   useEffect(() => {
     blogService.getAll().then(blogs => {
       blogs.sort((a,b) => {
-        return  b.likes - a.likes 
+        return  b.likes - a.likes
       })
       setBlogs( blogs )
     }
-      
-    )  
+
+    )
   }, [])
 
   useEffect(() => {
@@ -48,11 +48,11 @@ const App = () => {
       window.localStorage.setItem(
         'loggedBloglistUser', JSON.stringify(user)
       )
-      blogService.setToken(user.token) 
+      blogService.setToken(user.token)
 
       setUser(user)
       setUsername('')
-      setPassword('') 
+      setPassword('')
     }
     catch (exception) {
       setErrorMessage('wrong username or password')
@@ -74,18 +74,17 @@ const App = () => {
     }, 3000)
   }
 
-  const createPost = (newObject) => {
-    blogFormRef.current.toggleVisibility()
-    blogService.setToken(user.token)
-    blogService.create(newObject)
+  const createPost = async (newObject) => {
+    await blogFormRef.current.toggleVisibility()
+    await blogService.setToken(user.token)
+    await blogService.create(newObject)
+
     notify(`a new blog ${newObject.title} by ${newObject.author} added`)
-    blogService.getAll()
-      .then(blogs => {
-        blogs.sort((a,b) => {
-          return  b.likes - a.likes 
-        })
-        setBlogs( blogs.concat(blogs) )}
-    ) 
+    const blogs = await blogService.getAll()
+    blogs.sort((a,b) => {
+      return  b.likes - a.likes
+    })
+    setBlogs(blogs)
   }
 
   const addLike = async (newObject, id) => {
@@ -94,9 +93,9 @@ const App = () => {
 
     const blogs = await blogService.getAll()
     blogs.sort((a,b) => {
-          return  b.likes - a.likes 
-        })
-    setBlogs( blogs ) 
+      return  b.likes - a.likes
+    })
+    setBlogs( blogs )
   }
 
   const deletePost = async (id) => {
@@ -104,8 +103,8 @@ const App = () => {
     await blogService.remove(id)
     const blogs = await blogService.getAll()
     blogs.sort((a,b) => {
-          return  b.likes - a.likes 
-        })
+      return  b.likes - a.likes
+    })
     setBlogs( blogs )
   }
 
@@ -115,8 +114,8 @@ const App = () => {
       <LoginForm
         username = {username}
         password = {password}
-        handleNameChange = {({target}) => setUsername(target.value)}
-        handlePasswordChange = {({target}) => setPassword(target.value)}
+        handleNameChange = {({ target }) => setUsername(target.value)}
+        handlePasswordChange = {({ target }) => setPassword(target.value)}
         handleLogin = {loginHandler}
       />
     </div>
@@ -133,13 +132,13 @@ const App = () => {
         </p>
       </form>
 
-      <Toggle buttonLabel='create' ref= {blogFormRef}> 
+      <Toggle buttonLabel='create' ref= {blogFormRef}>
         <PostForm createPost= {createPost}/>
       </Toggle>
 
       {blogs.map( blog =>
-        <ToggleView addLike={addLike} loggedUser={user} deletePost={deletePost}>
-          <Blog key={blog.id} blog={blog}/>
+        <ToggleView addLike={addLike} loggedUser={user} deletePost={deletePost} key= {user.id}>
+          <Blog key= {blog.id} blog={blog}/>
         </ToggleView>
       )}
 

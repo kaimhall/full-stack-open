@@ -1,5 +1,5 @@
 
-const Blog = ({blog}) => {
+const Blog = ({ blog }) => {
 
   return(
     <div key={blog.id}>
@@ -7,7 +7,7 @@ const Blog = ({blog}) => {
       {blog.url} <br></br>
       likes {blog.likes} <br></br>
       {blog.user.name}
-    </div>  
+    </div>
   )
 }
 export default Blog
