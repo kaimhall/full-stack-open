@@ -7,6 +7,18 @@ const setToken = newToken => {
   token = `bearer ${newToken}`
 }
 
+const remove = async (id) => {
+  const address = `${baseUrl}/${id}`
+  const config = {
+    headers: {Authorization: token}
+  }
+  const response = await axios.delete(
+    address,
+    config
+  )
+  return response.data
+}
+
 const getAll = () => {
   const request = axios.get(baseUrl)
   return request.then(response => response.data)
@@ -39,4 +51,4 @@ const update = async (newObject, id) => {
 }
 
 // eslint-disable-next-line import/no-anonymous-default-export
-export default { getAll, create, update, setToken }
+export default { getAll, create, update, setToken, remove }

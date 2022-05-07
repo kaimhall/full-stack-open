@@ -17,11 +17,7 @@ const App = () => {
 
   const [errorMessage, setErrorMessage] = useState(null)
   const [notification, setNotification] = useState(null)
-
   
-  const blogFormRef = useRef()
-  
-
   useEffect(() => {
     blogService.getAll().then(blogs => {
       blogs.sort((a,b) => {
@@ -40,6 +36,8 @@ const App = () => {
       setUser(user)
     }
   }, [])
+
+  const blogFormRef = useRef()
 
   const loginHandler = async (event) => {
     event.preventDefault()
@@ -61,6 +59,7 @@ const App = () => {
       notify( errorMessage, 'alert')
     }
   }
+
   const logoutHandler = (event) => {
     event.preventDefault()
     window.localStorage.clear()
@@ -85,20 +84,29 @@ const App = () => {
         blogs.sort((a,b) => {
           return  b.likes - a.likes 
         })
-        setBlogs( blogs )}
+        setBlogs( blogs.concat(blogs) )}
     ) 
   }
 
-  const addLike = (newObject, id) => {
-    blogService.setToken(user.token)
-    blogService.update(newObject, id)
-    blogService.getAll()
-      .then(blogs => {
-        blogs.sort((a,b) => {
+  const addLike = async (newObject, id) => {
+    await blogService.setToken(user.token)
+    await blogService.update(newObject, id)
+
+    const blogs = await blogService.getAll()
+    blogs.sort((a,b) => {
           return  b.likes - a.likes 
         })
-        setBlogs( blogs )}
-    )  
+    setBlogs( blogs ) 
+  }
+
+  const deletePost = async (id) => {
+    await blogService.setToken(user.token)
+    await blogService.remove(id)
+    const blogs = await blogService.getAll()
+    blogs.sort((a,b) => {
+          return  b.likes - a.likes 
+        })
+    setBlogs( blogs )
   }
 
   const loginForm = () => (
@@ -130,7 +138,7 @@ const App = () => {
       </Toggle>
 
       {blogs.map( blog =>
-        <ToggleView addLike={addLike}>
+        <ToggleView addLike={addLike} loggedUser={user} deletePost={deletePost}>
           <Blog key={blog.id} blog={blog}/>
         </ToggleView>
       )}
