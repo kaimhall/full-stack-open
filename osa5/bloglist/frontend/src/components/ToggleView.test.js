@@ -9,6 +9,7 @@ describe('<ToggleView />', () => {
   let container
 
   const u1 = { name: 'kai' }
+
   const testBlog = {
     title: 'testblog',
     author: 'root',
@@ -16,15 +17,18 @@ describe('<ToggleView />', () => {
     user: u1,
     url: 'www.nogo.com'
   }
+
   const loggedUser = {
     name: 'root',
     token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjYyNzI5MTNjZTI4NWNhODU4MDU0ZWRiMCIsImlhdCI6MTY1MTk0NDcyOX0.cci0xZtTKmXCvYQyX4DtOV41myaznKSnWGhpseooL4U',
     username: 'root'
   }
 
+  const mockHandler = jest.fn()
+
   beforeEach(() => {
     container = render(
-      <ToggleView buttonLabel="view" loggedUser={loggedUser}>
+      <ToggleView buttonLabel="view" loggedUser={loggedUser} addLike = { mockHandler }>
         <Blog blog={testBlog}/>
       </ToggleView>
     ).container
@@ -58,5 +62,17 @@ describe('<ToggleView />', () => {
     expect(url).toBeDefined()
     const likes = screen.getByText('0', { exact: false })
     expect(likes).toBeDefined()
+  })
+
+  test('clicking like button twice returns two function calls', async () => {
+    const user = userEvent.setup()
+    const button = screen.getByText('view')
+    await user.click(button)
+
+    const user2 = userEvent.setup()
+    const button2 = screen.getByText('like')
+    await user2.click(button2)
+    await user2.click(button2)
+    expect(mockHandler.mock.calls).toHaveLength(2)
   })
 })
