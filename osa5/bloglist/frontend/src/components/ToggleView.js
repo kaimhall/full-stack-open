@@ -6,7 +6,6 @@ const ToggleView = ({ children, addLike, loggedUser, deletePost }) => {
   const { title, author, url, likes, user, id } = children.props.blog
   const [blogView, setBlogView] = useState('hide')
 
-
   const blogStyle = {
     paddingTop: 5,
     paddingLeft: 2,
@@ -14,6 +13,7 @@ const ToggleView = ({ children, addLike, loggedUser, deletePost }) => {
     borderWidth: 1,
     marginBottom: 5,
   }
+
   const viewBlog = () => {
     setBlogView('view')
   }
@@ -34,7 +34,6 @@ const ToggleView = ({ children, addLike, loggedUser, deletePost }) => {
   }
 
   const removePost = () => {
-    //console.log()
     if(window.confirm(`remove blog ${title} by ${author}`)) {
       deletePost(id)
     }
@@ -42,14 +41,14 @@ const ToggleView = ({ children, addLike, loggedUser, deletePost }) => {
 
   if (blogView === 'hide') {
     return (
-      <div key = {id} style={blogStyle}>
+      <div key = {id} style={blogStyle} className='blogHideContent'>
         {title} {author} <button onClick = {viewBlog}>view</button>
       </div>
     )
   }
   else if (blogView === 'view'){
     return (
-      <div key={id} style={blogStyle}>
+      <div key={id} style={blogStyle} className='blogViewContent'>
         {title} {author} <button  onClick = {hideBlog}>hide</button> <br></br>
         {url}<br></br>
         {likes} <button onClick={createLike}>like</button> <br></br>
