@@ -20,9 +20,11 @@ test('<PostForm /> calls with proper object', async () => {
   const title = screen.getByPlaceholderText('title')
   const author = screen.getByPlaceholderText('author')
   const url = screen.getByPlaceholderText('url')
-  await user.type(title,'test')
-  await user.type(author,'test')
-  await user.type(url,'test')
+
+  await user.type(title, combareObj.title)
+  await user.type(author,combareObj.author)
+  await user.type(url, combareObj.url)
+
   await user.click(Button)
   expect(createPost.mock.calls).toHaveLength(2)
   expect(createPost.mock.calls[1][0]).toEqual(combareObj)
