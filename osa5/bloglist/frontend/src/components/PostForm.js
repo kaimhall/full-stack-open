@@ -25,7 +25,7 @@ const PostForm = ({ createPost }) => {
   }
 
   return (
-    <div>
+    <div className='blogDiv'>
       <h2>create new</h2>
       <form onSubmit = {postHandler}>
         <div>
@@ -35,6 +35,7 @@ const PostForm = ({ createPost }) => {
             value= {title}
             name = 'title'
             onChange = {({ target }) => setTitle(target.value)}
+            placeholder = 'title'
           />
         </div>
         <div>
@@ -44,6 +45,8 @@ const PostForm = ({ createPost }) => {
             value= {author}
             name = 'author'
             onChange = {({ target }) => setAuthor(target.value)}
+            id = 'author'
+            placeholder = 'author'
           />
         </div>
         <div>
@@ -53,6 +56,8 @@ const PostForm = ({ createPost }) => {
             value= {url}
             name = 'url'
             onChange = {({ target }) => setUrl(target.value)}
+            id = 'url'
+            placeholder = 'url'
           />
         </div>
         <button type="submit">create</button>

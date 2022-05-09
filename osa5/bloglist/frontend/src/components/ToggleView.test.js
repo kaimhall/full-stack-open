@@ -6,6 +6,7 @@ import ToggleView from './ToggleView'
 import Blog from './Blog'
 
 describe('<ToggleView />', () => {
+  // eslint-disable-next-line no-unused-vars
   let container
 
   const u1 = { name: 'kai' }
