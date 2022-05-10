@@ -31,36 +31,35 @@ const PostForm = ({ createPost }) => {
         <div>
           title:
           <input
+            id='blogtitle'
             type= 'text'
             value= {title}
             name = 'title'
             onChange = {({ target }) => setTitle(target.value)}
-            placeholder = 'title'
+
           />
         </div>
         <div>
           author:
           <input
+            id ='blogauthor'
             type= 'text'
             value= {author}
             name = 'author'
             onChange = {({ target }) => setAuthor(target.value)}
-            id = 'author'
-            placeholder = 'author'
           />
         </div>
         <div>
           url:
           <input
-            type= 'text'
+            id ='blogurl'
+            type='text'
             value= {url}
             name = 'url'
             onChange = {({ target }) => setUrl(target.value)}
-            id = 'url'
-            placeholder = 'url'
           />
         </div>
-        <button type="submit">create</button>
+        <button id= 'blogcreate' type="submit">create</button>
       </form>
     </div>
   )}
