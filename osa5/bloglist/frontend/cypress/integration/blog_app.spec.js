@@ -42,7 +42,7 @@ describe('Blog app', function() {
       cy.get('#loginBtn').click()
     })
 
-    it.only('A blog can be created', function() {
+    it('A blog can be created', function() {
       cy.contains('create').click()
       cy.get('#blogtitle').type('blog from cy')
       cy.get('#blogauthor').type('cypress')
@@ -50,6 +50,20 @@ describe('Blog app', function() {
       cy.get('#blogcreate').click()
       cy.contains('a new blog blog from cy by cypress added')
       cy.contains('blog from cy cypress')
+    })
+
+    it.only('A blog can be liked', function(){
+      cy.contains('create').click()
+      cy.get('#blogtitle').type('blog from cy')
+      cy.get('#blogauthor').type('cypress')
+      cy.get('#blogurl').type('www.cypress.com')
+      cy.get('#blogcreate').click()
+      cy.contains('a new blog blog from cy by cypress added')
+      cy.contains('blog from cy cypress')
+
+      cy.contains('view').click()
+      cy.contains('like').click()
+      cy.contains('1').click()
     })
   })
 })
