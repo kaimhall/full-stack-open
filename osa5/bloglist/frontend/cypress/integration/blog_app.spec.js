@@ -66,7 +66,7 @@ describe('Blog app', function() {
       cy.contains('1').click()
     })
 
-    it.only('A blog can be deleted', function(){
+    it('A blog can be deleted', function(){
       cy.contains('create').click()
       cy.get('#blogtitle').type('blog from cy')
       cy.get('#blogauthor').type('cypress')
