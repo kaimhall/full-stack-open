@@ -55,8 +55,9 @@ const App = () => {
       setPassword('')
     }
     catch (exception) {
-      setErrorMessage('wrong username or password')
-      notify( errorMessage, 'alert')
+      await setErrorMessage('wrong username or password')
+      await notify( 'wrong username or password', 'alert')
+      console.log(errorMessage)
     }
   }
 
@@ -128,7 +129,7 @@ const App = () => {
       <form onSubmit = {logoutHandler} >
         <p>
           {user.name} logged in
-          <button type="submit"> logout</button>
+          <button id='logoutBtn' type="submit"> logout</button>
         </p>
       </form>
 
