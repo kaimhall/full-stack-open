@@ -9,7 +9,7 @@ const Anecdote = ({anecdote, handleClick}) => {
       </div>
       <div>
         has {anecdote.votes}
-        <button onClick= {handleClick}>votes</button>
+        <button onClick= {handleClick}>vote</button>
     </div>
   </div>
   )
@@ -20,7 +20,6 @@ const AnecdoteList = () => {
   const anecdotes = useSelector(state => state)
   return(
     <div>
-      <h2>Anecdotes</h2>
       {anecdotes.map( item => 
         <Anecdote
           key= {item.id}
