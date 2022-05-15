@@ -16,7 +16,7 @@ const asObject = (anecdote) => {
 }
 const initialState = anecdotesAtStart.map(asObject)
 
-//remember state comes
+//remember state comes redux
 const reducer = (state = initialState, action) => {
   switch(action.type) {
     case 'NEW_ANECDOTE':
@@ -36,5 +36,12 @@ const reducer = (state = initialState, action) => {
       return state 
   }
 }
+
+export const addVote = (id) => {
+  return {
+    type: 'VOTE',
+    data: {id}
+  }
+} 
 
 export default reducer
