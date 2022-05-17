@@ -1,5 +1,6 @@
 import reducer from './anecdoteReducer'
 import deepFreeze from 'deep-freeze'
+import store from './store'
 
 const anecdotesAtStart = [
   'If it hurts, do it more often',
@@ -11,25 +12,24 @@ const anecdotesAtStart = [
 ]
 
 describe('anecdote reducer:', () => {
-  test('returns init state', () => {
-    const newState = reducer(undefined, [])
-    expect(newState.map( anecdote => anecdote.content)).toEqual(anecdotesAtStart)
-    })
-  
+  test('return init state', () => {
+    const newState = reducer(undefined, {type: 'anecdotes'})
+    expect(newState.map(s => s.content)).toEqual(anecdotesAtStart)
+  })
+
   test('adds an anecdote by NEW_ANECDOTE', () => {
     const state = []
     const action = {
-      type: 'NEW_ANECDOTE',
-      data: {
-        content: 'Can do it once, can do it twice',
-        id: 1,
-        votes: 0
-      }
+      type: 'anecdotes/addAnecdote',
+      payload: 'the app state is in redux store',
     }
+
     deepFreeze(state)
     const newState = reducer(state, action)
     expect(newState).toHaveLength(1)
+    expect(newState.map(s => s.content)).toContainEqual(action.payload)
   })
+
   test('votes by VOTE', () => {
     const state = [
       {
@@ -43,17 +43,16 @@ describe('anecdote reducer:', () => {
         votes: 0
       }
     ]
-    
     const action = {
-      type: 'VOTE',
-      data: {
-        id:2
-      }
+      type: 'anecdotes/addVote',
+      payload: 2
     }
     deepFreeze(state)
     const newState = reducer(state, action)
+    
     expect(newState).toHaveLength(2)
     expect(newState).toContainEqual(state[0])
-    expect(newState[1].votes).toEqual(1)
+    expect(newState[0].votes).toEqual(1)
+    
   })
 })
