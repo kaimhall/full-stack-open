@@ -1,6 +1,5 @@
 import reducer from './anecdoteReducer'
 import deepFreeze from 'deep-freeze'
-import store from './store'
 
 const anecdotesAtStart = [
   'If it hurts, do it more often',
@@ -53,6 +52,17 @@ describe('anecdote reducer:', () => {
     expect(newState).toHaveLength(2)
     expect(newState).toContainEqual(state[0])
     expect(newState[0].votes).toEqual(1)
-    
+  })
+  test('message ads message', () => {
+    const payload = 'first message'
+    const action = {
+      type: 'messages/createMessage'
+    }
+    const message = reducer(payload, action)
+    expect(message).toEqual(payload)
+  })
+  test('removes message', () => {
+    const message = reducer('', {type:'messages/removeMessage'})
+    expect(message).toEqual('')
   })
 })
