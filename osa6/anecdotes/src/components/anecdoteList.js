@@ -4,14 +4,21 @@ import { removeMessage } from '../reducers/notificationReducer'
 import { voteMessage } from '../reducers/notificationReducer'
 
 const Anecdote = ({anecdote, handleClick}) => {
+  const divStyle = {
+    marginBottom:2
+  }
+  const btnStyle = {
+    marginLeft:4
+  }
+
   return(
     <div>
-      <div>
+      <div style={divStyle}>
         {anecdote.content}
       </div>
       <div>
         has {anecdote.votes}
-        <button onClick= {handleClick}>vote</button>
+        <button style = {btnStyle} onClick= {handleClick}>vote</button>
     </div>
   </div>
   )
@@ -19,7 +26,13 @@ const Anecdote = ({anecdote, handleClick}) => {
 
 const AnecdoteList = () => {
   const dispatch = useDispatch()
-  const anecdotes = useSelector(state => state.anecdotes)
+  const filter = useSelector(state => state.filters)
+  let anecdotes = useSelector(state => state.anecdotes)
+  if(filter !== ''){
+    anecdotes = anecdotes.filter(
+        anecdote => anecdote.content.toLowerCase()
+        .includes(filter.toLowerCase()))
+  }
   return(
     <div>
       {anecdotes.map( item => 

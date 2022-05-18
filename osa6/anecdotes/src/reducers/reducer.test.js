@@ -1,5 +1,8 @@
-import reducer from './anecdoteReducer'
+import anecdoteReducer from './anecdoteReducer'
+import notificationReducer from './notificationReducer'
+import filterReducer from './filterReducer'
 import deepFreeze from 'deep-freeze'
+import { describe } from 'eslint/lib/rule-tester/rule-tester'
 
 const anecdotesAtStart = [
   'If it hurts, do it more often',
@@ -12,7 +15,7 @@ const anecdotesAtStart = [
 
 describe('anecdote reducer:', () => {
   test('return init state', () => {
-    const newState = reducer(undefined, {type: 'anecdotes'})
+    const newState = anecdoteReducer(undefined, {type: 'anecdotes'})
     expect(newState.map(s => s.content)).toEqual(anecdotesAtStart)
   })
 
@@ -24,7 +27,7 @@ describe('anecdote reducer:', () => {
     }
 
     deepFreeze(state)
-    const newState = reducer(state, action)
+    const newState = anecdoteReducer(state, action)
     expect(newState).toHaveLength(1)
     expect(newState.map(s => s.content)).toContainEqual(action.payload)
   })
@@ -47,22 +50,50 @@ describe('anecdote reducer:', () => {
       payload: 2
     }
     deepFreeze(state)
-    const newState = reducer(state, action)
+    const newState = anecdoteReducer(state, action)
     
     expect(newState).toHaveLength(2)
     expect(newState).toContainEqual(state[0])
     expect(newState[0].votes).toEqual(1)
   })
+})
+describe('notificationReducer:', () => {
   test('message ads message', () => {
-    const payload = 'first message'
+    const state = ''
     const action = {
+      payload:'first message',
       type: 'messages/createMessage'
     }
-    const message = reducer(payload, action)
-    expect(message).toEqual(payload)
+    const message = notificationReducer(state, action)
+    expect(message).toBe(action.payload)
   })
   test('removes message', () => {
-    const message = reducer('', {type:'messages/removeMessage'})
+    const state = 'earlier message'
+    const action = {
+      payload: '',
+      type: 'messages/removeMessage'
+    }
+    const message = notificationReducer(state, action)
     expect(message).toEqual('')
+  })
+  test('votes message', () => {
+    const state = ''
+    const action = {
+      payload: 'voted message',
+      type: 'messages/voteMessage'
+    }
+    const message = notificationReducer(state, action)
+    expect(message).toEqual(action.payload)
+  })
+  
+})
+describe('filterReducer:', () => {
+  test('sets filter', () => {
+    const action= {
+      payload: 'teststring',
+      type: 'filters/setFilter'
+    }
+    const filter = filterReducer(undefined, action)
+    expect(filter).toEqual(action.payload)
   })
 })
