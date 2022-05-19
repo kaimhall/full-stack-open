@@ -7,9 +7,8 @@ const anecdoteSlice = createSlice({
   initialState: [],
   reducers: {
     updateAnecdote(state, action) {
-      const id = action.payload.id
       return ( state.map( anecdote => 
-        anecdote.id !== id ? anecdote: action.payload )
+        anecdote.id !== action.payload.id ? anecdote: action.payload )
         .sort( (a,b) => b.votes - a.votes))
     },
     setAnecdotes(state, action) {
