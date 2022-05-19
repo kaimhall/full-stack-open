@@ -1,10 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit"
-
-const initialState = ''
+import { addTimeOut } from "./timeReducer"
 
 const notificationSlice = createSlice({
   name: 'messages',
-  initialState,
+  initialState:'',
   reducers: {
     createMessage(state, action) {
         return action.payload
@@ -14,15 +13,16 @@ const notificationSlice = createSlice({
     } 
   } 
 })
-export const {createMessage, removeMessage, voteMessage} = notificationSlice.actions
 
 export const setNotification = (content, time) => {
   return dispatch => {
     dispatch(createMessage(content))
-    setTimeout( () => {
+    const timeId = setTimeout( () => {
       dispatch(removeMessage(''))
     }, time * 1000)
+    dispatch(addTimeOut(timeId))
   } 
 }
 
+export const {createMessage, removeMessage, voteMessage} = notificationSlice.actions
 export default notificationSlice.reducer
