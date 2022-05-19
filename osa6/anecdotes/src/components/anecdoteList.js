@@ -10,7 +10,6 @@ const Anecdote = ({anecdote, handleClick}) => {
   const btnStyle = {
     marginLeft:4
   }
-
   return(
     <div>
       <div style={divStyle}>
@@ -26,8 +25,10 @@ const Anecdote = ({anecdote, handleClick}) => {
 
 const AnecdoteList = () => {
   const dispatch = useDispatch()
+
   const filter = useSelector(state => state.filters)
-  let anecdotes = useSelector(state => state.anecdotes)
+  let anecdotes =  useSelector(state => state.anecdotes)
+  
   if(filter !== ''){
     anecdotes = anecdotes.filter(
         anecdote => anecdote.content.toLowerCase()
