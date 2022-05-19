@@ -12,13 +12,18 @@
     },
     {
       "content": "declarative programming is antithesis of programming",
-      "votes": 6,
+      "votes": 7,
       "id": "VJgF-xH"
     },
     {
       "content": "sleep is a cousin of death",
-      "votes": 6,
+      "votes": 8,
       "id": "UEWeSm4"
+    },
+    {
+      "content": "git is something else",
+      "votes": 1,
+      "id": "-trSFAI"
     }
   ]
 }
