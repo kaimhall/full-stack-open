@@ -1,5 +1,4 @@
 import { connect } from 'react-redux'
-import { useDispatch } from 'react-redux'
 import { setFilter } from '../reducers/filterReducer'
 
 const Filter = (props) => {
