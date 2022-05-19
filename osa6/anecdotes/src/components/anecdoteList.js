@@ -41,7 +41,7 @@ const AnecdoteList = () => {
           key= {item.id}
           anecdote = {item}
           handleClick= { () => {
-            dispatch(addVote(item.id))
+            dispatch(addVote(item))
             dispatch(voteMessage(item.content))
             setTimeout(() => {
               dispatch(removeMessage(''))
