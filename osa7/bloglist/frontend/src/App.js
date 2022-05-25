@@ -8,34 +8,36 @@ import Blog from './components/Blog'
 import Notification from './components/notification'
 import ToggleView from './components/ToggleView'
 
+import { setMessage, removeMessage } from './reducers/NotificationReducer'
+import { setBlogs } from './reducers/BlogReducer'
+import { setUser } from './reducers/UserReducer'
+import { useSelector, useDispatch } from 'react-redux'
+
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
-  const [user, setUser] = useState(null)
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
+  const dispatch = useDispatch()
 
-  const [errorMessage, setErrorMessage] = useState(null)
-  const [notification, setNotification] = useState(null)
+  const byLikes = (b1, b2) => b2.likes > b1.likes ? 1 : -1
 
   useEffect(() => {
-    blogService.getAll().then(blogs => {
-      blogs.sort((a,b) => {
-        return  b.likes - a.likes
-      })
-      setBlogs( blogs )
-    }
-
-    )
-  }, [])
+    blogService
+      .getAll().then(blogs => blogs.sort(byLikes))
+      .then(blogs => dispatch(setBlogs(blogs)))
+  }, [dispatch])
 
   useEffect(() => {
     const logUserJSON = window.localStorage.getItem('loggedBloglistUser')
     if (logUserJSON) {
       const user = JSON.parse(logUserJSON)
-      setUser(user)
+      dispatch(setUser(user))
     }
   }, [])
+
+  const blogs = useSelector(state => state.blogs)
+  const user = useSelector(state => state.users)
+
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
 
   const blogFormRef = useRef()
 
@@ -50,14 +52,12 @@ const App = () => {
       )
       blogService.setToken(user.token)
 
-      setUser(user)
+      await setUser(user)
       setUsername('')
       setPassword('')
     }
     catch (exception) {
-      await setErrorMessage('wrong username or password')
-      await notify( 'wrong username or password', 'alert')
-      console.log(errorMessage)
+      notify('wrong username or password', 'alert')
     }
   }
 
@@ -65,13 +65,14 @@ const App = () => {
     event.preventDefault()
     window.localStorage.clear()
     setUser(null)
-    //window.localStorage.removeItem('loggedblogListUser')
   }
 
-  const notify = (message, type= 'info') => {
-    setNotification({ message, type })
-    setTimeout( () => {
-      setNotification(null)
+  const notify = (message, type = 'info') => {
+    const content = { message, type }
+    dispatch(setMessage(content))
+
+    setTimeout(() => {
+      dispatch(removeMessage())
     }, 3000)
   }
 
@@ -82,42 +83,41 @@ const App = () => {
 
     notify(`a new blog ${newObject.title} by ${newObject.author} added`)
     const blogs = await blogService.getAll()
-    blogs.sort((a,b) => {
-      return  b.likes - a.likes
-    })
-    setBlogs(blogs)
+    blogs.sort(byLikes)
+    dispatch(setBlogs(blogs))
   }
 
   const addLike = async (newObject, id) => {
     await blogService.setToken(user.token)
     await blogService.update(newObject, id)
-
     const blogs = await blogService.getAll()
-    blogs.sort((a,b) => {
-      return  b.likes - a.likes
+    blogs.sort((a, b) => {
+      return b.likes - a.likes
     })
-    setBlogs( blogs )
+    dispatch(setBlogs(blogs))
   }
 
   const deletePost = async (id) => {
     await blogService.setToken(user.token)
     await blogService.remove(id)
     const blogs = await blogService.getAll()
-    blogs.sort((a,b) => {
-      return  b.likes - a.likes
+    blogs.sort((a, b) => {
+      return b.likes - a.likes
     })
-    setBlogs( blogs )
+    dispatch(setBlogs(blogs))
   }
 
   const loginForm = () => (
     <div>
-      <Notification notification= {notification} />
+      <Notification
+        notification={useSelector(state => state.notifications)}
+      />
       <LoginForm
-        username = {username}
-        password = {password}
-        handleNameChange = {({ target }) => setUsername(target.value)}
-        handlePasswordChange = {({ target }) => setPassword(target.value)}
-        handleLogin = {loginHandler}
+        username={username}
+        password={password}
+        handleNameChange={({ target }) => setUsername(target.value)}
+        handlePasswordChange={({ target }) => setPassword(target.value)}
+        handleLogin={loginHandler}
       />
     </div>
   )
@@ -125,24 +125,25 @@ const App = () => {
   const postForm = () => (
     <div>
       <h1>Blogs</h1>
-      <Notification notification={notification} />
-      <form onSubmit = {logoutHandler} >
+      <Notification
+        notification={useSelector(state => state.notifications)}
+      />
+      <form onSubmit={logoutHandler} >
         <p>
           {user.name} logged in
           <button id='logoutBtn' type="submit"> logout</button>
         </p>
       </form>
 
-      <Toggle buttonLabel='create' ref= {blogFormRef}>
-        <PostForm createPost= {createPost}/>
+      <Toggle buttonLabel='create' ref={blogFormRef}>
+        <PostForm createPost={createPost} />
       </Toggle>
 
-      {blogs.map( blog =>
-        <ToggleView key= {blog.id} addLike={addLike} loggedUser={user} deletePost={deletePost}>
-          <Blog blog={blog}/>
+      {blogs.map(blog =>
+        <ToggleView key={blog.id} addLike={addLike} loggedUser={user} deletePost={deletePost}>
+          <Blog blog={blog} />
         </ToggleView>
       )}
-
     </div>
   )
   return (

@@ -12,9 +12,8 @@ const Notification = ({ notification }) => {
     padding: 10,
     marginBottom: 10,
   }
-
   return (
-    <div className= 'error' style={style}>
+    <div className='error' style={style}>
       {notification.message}
     </div>
   )

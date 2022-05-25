@@ -1,7 +1,7 @@
 
 const Blog = ({ blog }) => {
-
-  return(
+  console.log(blog)
+  return (
     <div key={blog.id}>
       {blog.title} {blog.author} <br></br>
       {blog.url} <br></br>

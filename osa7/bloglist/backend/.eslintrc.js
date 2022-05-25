@@ -5,26 +5,16 @@ module.exports = {
     'es2021': true,
     'jest': true,
   },
-  'extends': 'eslint:recommended',
+  'extends': [
+    'eslint:recommended',
+    'prettier'
+  ]
+  ,
   'parserOptions': {
     'ecmaVersion': 'latest'
   },
-  'rules': {
-    'indent': [
-      'error',
-      2
+  'quotes': [
+    'error',
+    'single'
     ],
-    'linebreak-style': [
-      'error',
-      'unix'
-    ],
-    'quotes': [
-      'error',
-      'single'
-    ],
-    'semi': [
-      'error',
-      'never'
-    ]
   }
-}

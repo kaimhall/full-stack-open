@@ -2,6 +2,7 @@ import { useState } from 'react'
 import PropTypes from 'prop-types'
 
 const PostForm = ({ createPost }) => {
+
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
@@ -27,42 +28,43 @@ const PostForm = ({ createPost }) => {
   return (
     <div className='blogDiv'>
       <h2>create new</h2>
-      <form onSubmit = {postHandler}>
+      <form onSubmit={postHandler}>
         <div>
           title:
           <input
             id='blogtitle'
-            type= 'text'
-            value= {title}
-            name = 'title'
-            onChange = {({ target }) => setTitle(target.value)}
+            type='text'
+            value={title}
+            name='title'
+            onChange={({ target }) => setTitle(target.value)}
 
           />
         </div>
         <div>
           author:
           <input
-            id ='blogauthor'
-            type= 'text'
-            value= {author}
-            name = 'author'
-            onChange = {({ target }) => setAuthor(target.value)}
+            id='blogauthor'
+            type='text'
+            value={author}
+            name='author'
+            onChange={({ target }) => setAuthor(target.value)}
           />
         </div>
         <div>
           url:
           <input
-            id ='blogurl'
+            id='blogurl'
             type='text'
-            value= {url}
-            name = 'url'
-            onChange = {({ target }) => setUrl(target.value)}
+            value={url}
+            name='url'
+            onChange={({ target }) => setUrl(target.value)}
           />
         </div>
-        <button id= 'blogcreate' type="submit">create</button>
+        <button id='blogcreate' type="submit">create</button>
       </form>
     </div>
-  )}
+  )
+}
 
 PostForm.propTypes = {
   createPost: PropTypes.func.isRequired
