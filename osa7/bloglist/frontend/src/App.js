@@ -9,23 +9,18 @@ import Notification from './components/notification'
 import ToggleView from './components/ToggleView'
 
 import { setMessage, removeMessage } from './reducers/NotificationReducer'
-import { setBlogs, appendBlog, likeBlog, deleteBlog } from './reducers/BlogReducer'
+import { InitBlogs, CreateBlog, RemoveBlog, AddLike } from './reducers/BlogReducer'
 import { setUser } from './reducers/UserReducer'
 import { useSelector, useDispatch } from 'react-redux'
-
-
 
 const App = () => {
   const blogs = useSelector(state => state.blogs)
   const user = useSelector(state => state.users)
 
   const dispatch = useDispatch()
-  const byLikes = (b1, b2) => b2.likes > b1.likes ? 1 : -1
 
   useEffect(() => {
-    blogService
-      .getAll().then(blogs => blogs.sort(byLikes))
-      .then(blogs => dispatch(setBlogs(blogs)))
+    dispatch(InitBlogs())
   }, [dispatch])
 
   useEffect(() => {
@@ -77,22 +72,16 @@ const App = () => {
 
   const createPost = async (newObject) => {
     await blogFormRef.current.toggleVisibility()
-    await blogService.setToken(user.token)
-    const newBlog = await blogService.create(newObject)
-    dispatch(appendBlog(newBlog))
+    dispatch(CreateBlog(newObject, user))
     notify(`a new blog ${newObject.title} by ${newObject.author} added`)
   }
 
   const addLike = async (newObject, id) => {
-    await blogService.setToken(user.token)
-    const newBlog = await blogService.update(newObject, id)
-    dispatch(likeBlog(newBlog))
+    dispatch(AddLike(newObject, id, user))
   }
 
   const deletePost = async (id) => {
-    await blogService.setToken(user.token)
-    await blogService.remove(id)
-    dispatch(deleteBlog(id))
+    dispatch(RemoveBlog(id, user))
   }
 
   const loginForm = () => (
