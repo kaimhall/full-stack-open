@@ -1,35 +1,38 @@
-const LoginForm = ({
-  handleNameChange,
-  handlePasswordChange,
-  username,
-  password,
-  handleLogin,
-}) => {
+import { useState } from 'react'
+import { useSelector } from 'react-redux'
+
+
+const LoginForm = ({ onLogin }) => {
+  useSelector(state => state.users)
+
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+
+  const handleSubmit = (event) => {
+    event.preventDefault()
+    onLogin(username, password)
+  }
+
   return (
     <div>
       <h2>Log in to application</h2>
-      <form onSubmit={handleLogin}>
+      <form onSubmit={handleSubmit}>
         <div>
           username
           <input
-            type="text"
+            type='text'
             value={username}
-            name="Username"
-            onChange={handleNameChange}
-            id= 'username'
+            onChange={({ target }) => setUsername(target.value)}
           />
         </div>
         <div>
           password
           <input
-            type="password"
+            type='text'
             value={password}
-            name="Password"
-            onChange={handlePasswordChange}
-            id= 'password'
-          />
+            onChange={({ target }) => setPassword(target.value)} />
         </div>
-        <button id ='loginBtn' type="submit">login</button>
+        <button id='loginBtn' type="submit">login</button>
       </form>
     </div>
   )

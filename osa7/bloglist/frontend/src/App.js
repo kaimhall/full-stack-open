@@ -1,17 +1,18 @@
-import { useState, useEffect, useRef } from 'react'
-import blogService from './services/blogs'
-import loginService from './services/login'
+import { useEffect, useRef } from 'react'
 import LoginForm from './components/LoginForm'
 import Toggle from './components/Toggle'
 import PostForm from './components/PostForm'
 import Blog from './components/Blog'
 import Notification from './components/notification'
 import ToggleView from './components/ToggleView'
-
+import blogService from './services/blogs'
+import loginService from './services/login'
 import { setMessage, removeMessage } from './reducers/NotificationReducer'
 import { InitBlogs, CreateBlog, RemoveBlog, AddLike } from './reducers/BlogReducer'
 import { setUser } from './reducers/UserReducer'
 import { useSelector, useDispatch } from 'react-redux'
+import UserTable from './components/UserTable'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
 const App = () => {
   const blogs = useSelector(state => state.blogs)
@@ -31,35 +32,27 @@ const App = () => {
     }
   }, [dispatch])
 
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-
   const blogFormRef = useRef()
 
-  const loginHandler = async (event) => {
-    event.preventDefault()
+  const login = async (username, password) => {
     try {
       const user = await loginService.login({
         username, password,
       })
+      dispatch(setUser(user))
       window.localStorage.setItem(
         'loggedBloglistUser', JSON.stringify(user)
       )
       blogService.setToken(user.token)
 
-      await setUser(user)
-      setUsername('')
-      setPassword('')
-    }
-    catch (exception) {
-      notify('wrong username or password', 'alert')
-    }
+      notify(`${user.name} logged in!`)
+    } catch (err) { notify('wrong username/password', 'alert') }
   }
 
   const logoutHandler = (event) => {
     event.preventDefault()
     window.localStorage.clear()
-    setUser(null)
+    dispatch(setUser(null))
   }
 
   const notify = (message, type = 'info') => {
@@ -84,22 +77,14 @@ const App = () => {
     dispatch(RemoveBlog(id, user))
   }
 
-  const loginForm = () => (
+  const LoginView = () => (
     <div>
-      <Notification
-        notification={useSelector(state => state.notifications)}
-      />
-      <LoginForm
-        username={username}
-        password={password}
-        handleNameChange={({ target }) => setUsername(target.value)}
-        handlePasswordChange={({ target }) => setPassword(target.value)}
-        handleLogin={loginHandler}
-      />
+      <Notification notification={useSelector(state => state.notifications)} />
+      <LoginForm onLogin={login} />
     </div>
   )
 
-  const postForm = () => (
+  const PostView = () => (
     <div>
       <h1>Blogs</h1>
       <Notification
@@ -123,11 +108,30 @@ const App = () => {
       )}
     </div>
   )
+
+  const UserView = () => {
+    return (
+      <div>
+        <form onSubmit={logoutHandler} >
+          <h1>Blogs</h1>
+          <p> logged in </p>
+          <button id='logoutBtn' type="submit"> logout</button>
+        </form>
+        <h1>Users</h1>
+        <UserTable />
+      </div>
+    )
+  }
+  const home = user === null ? <LoginView /> : <PostView />
+
   return (
-    <div>
-      {user === null && loginForm()}
-      {user !== null && postForm()}
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={home} />
+        <Route path='/users' element={<UserView />} />
+      </Routes>
+    </BrowserRouter>
+
   )
 }
 
