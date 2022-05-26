@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import ToggleBtn from './ToggleBtn'
 
-const ToggleView = ({ children, addLike, loggedUser, deletePost }) => {
+const ToggleView = ({ children, addLike, deletePost }) => {
   const { title, author, url, likes, user, id } = children.props.blog
   const [blogView, setBlogView] = useState('hide')
 
@@ -52,7 +52,7 @@ const ToggleView = ({ children, addLike, loggedUser, deletePost }) => {
         {url}<br></br>
         {likes} <button onClick={createLike}>like</button> <br></br>
 
-        <ToggleBtn user={user} loggedUser={loggedUser}>
+        <ToggleBtn user={user.name}>
           <button onClick={removePost} >delete</button>
         </ToggleBtn>
       </div>
