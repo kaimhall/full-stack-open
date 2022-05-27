@@ -3,12 +3,11 @@ import ReactDOM from 'react-dom/client'
 import App from './App'
 import { configureStore } from '@reduxjs/toolkit'
 import { Provider } from 'react-redux'
-import UserService from './services/users'
 
 import NotificationReducer from './reducers/NotificationReducer'
-import BlogReducer from './reducers/BlogReducer'
-import UserReducer from './reducers/UserReducer'
-import UserListReducer, { setUserList } from './reducers/UserListReducer'
+import BlogReducer, { InitBlogs } from './reducers/BlogReducer'
+import UserReducer, { setUser } from './reducers/UserReducer'
+import UserListReducer, { InitUserList } from './reducers/UserListReducer'
 
 const store = configureStore({
   reducer: {
@@ -19,12 +18,17 @@ const store = configureStore({
   }
 })
 
-UserService.getAll().then(users =>
-  store.dispatch(setUserList(users))
-)
+const logUserJSON = window.localStorage.getItem('loggedBloglistUser')
+if (logUserJSON) {
+  const user = JSON.parse(logUserJSON)
+  store.dispatch(setUser(user))
+}
 
+store.dispatch(InitUserList())
+store.dispatch(InitBlogs())
 
-ReactDOM.createRoot(document.getElementById('root')).render(
+const root = ReactDOM.createRoot(document.getElementById('root'))
+root.render(
   <Provider store={store}>
     <App />
   </Provider>

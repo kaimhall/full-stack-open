@@ -1,6 +1,5 @@
-
 const Blog = ({ blog }) => {
-  console.log(blog)
+
   return (
     <div key={blog.id}>
       {blog.title} {blog.author} <br></br>
