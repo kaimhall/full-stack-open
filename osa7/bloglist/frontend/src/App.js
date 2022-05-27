@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { BrowserRouter, Routes, Route, useParams } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, useParams, Link } from 'react-router-dom'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import userService from './services/users'
@@ -16,6 +16,9 @@ import { CreateBlog, AddLike } from './reducers/BlogReducer'
 import { setUser } from './reducers/UserReducer'
 
 const App = () => {
+  const padding = {
+    padding: 5
+  }
   const blogs = useSelector(state => state.blogs)
   const user = useSelector(state => state.users)
   const dispatch = useDispatch()
@@ -63,14 +66,8 @@ const App = () => {
 
   const PostView = () => (
     <div>
-      <h2>Blogs</h2>
-      <Notification
-        notification={useSelector(state => state.notifications)}
-      />
-      <form onSubmit={logoutHandler} >
-        <p>{user.name} logged in</p>
-        <button id='logoutBtn' type="submit"> logout</button>
-      </form>
+      <h2>Blog App</h2>
+      <Notification notification={useSelector(state => state.notifications)} />
 
       <Toggle buttonLabel='create new' ref={blogFormRef}>
         <PostForm createPost={createPost} />
@@ -165,11 +162,21 @@ const App = () => {
 
   }
 
-  const home = user === null ? <LoginView /> : <PostView />
+  //const home = user === null ? <LoginView /> : <PostView />
   return (
     <BrowserRouter>
+      <div>
+        <Link style={padding} to="/">blogs</Link>
+        <Link style={padding} to="/users">users</Link>
+        {user
+          ? <em> logged in</em>
+          : <Link to="/login">login</Link>
+        }
+        <button>logout</button>
+      </div>
       <Routes>
-        <Route path='/' element={home} />
+        <Route path='/' element={<PostView />} />
+        <Route path='/login' element={<LoginView />} />
         <Route path='/users' element={<UserView />} />
         <Route path="/users/:id" element={<SingleUserView />} />
         <Route path="/blogs/:id" element={<BlogView />} />

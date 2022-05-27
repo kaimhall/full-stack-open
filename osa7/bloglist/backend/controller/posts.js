@@ -1,9 +1,10 @@
 //const jwt = require('jsonwebtoken')
-//const User = require('../models/user')
+const User = require('../models/user')
 
 const postRouter = require('express').Router() //import router..
 const Blog = require('../models/blog') // and mongoose model..
-
+const Comment = require('../models/comment')
+const comment = require('../models/comment')
 
 postRouter.get('/', async (request, response) => {
   const blog = await Blog
@@ -23,6 +24,21 @@ postRouter.post('/', async (request, response) => {
   user.blogs = user.blogs.concat(savedBlog)
   await user.save()
   return response.status(201).json(savedBlog)
+})
+
+postRouter.post('/:id/comments', async (request, response) => {
+  const comment = request.body.comment
+  const blog = await Blog.findById(request.params.id)
+
+  const newComment = new Comment({
+    comment: comment,
+    blog: blog._id
+  })
+
+  const savedComment = await newComment.save()
+  blog.comment = blog.comment.concat(savedComment._id)
+  await blog.save()
+  return response.status(201).json(savedComment)
 })
 
 postRouter.put('/:id', async (request, response) => {
