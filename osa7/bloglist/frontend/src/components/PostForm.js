@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import PropTypes from 'prop-types'
 
+
 const PostForm = ({ createPost }) => {
 
   const [title, setTitle] = useState('')

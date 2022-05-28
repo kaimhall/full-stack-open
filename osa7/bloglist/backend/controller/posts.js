@@ -51,7 +51,7 @@ postRouter.post('/:id/comments', async (request, response) => {
 
 postRouter.put('/:id', async (request, response) => {
   const blog = request.body
-
+  console.log(request.params.id)
   const updatedBlog = await Blog
     .findByIdAndUpdate(
       request.params.id,

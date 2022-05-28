@@ -17,6 +17,7 @@ import { CreateBlog, AddLike } from './reducers/BlogReducer'
 import { setUser } from './reducers/UserReducer'
 
 const App = () => {
+
   const padding = {
     padding: 5
   }
@@ -132,6 +133,7 @@ const App = () => {
   }
   // eslint-disable-next-line no-unused-vars
   const likeBlog = (id) => {
+    console.log(id)
     const object = blogs.find(b => b.id === id)
     const likedObject = {
       ...object,
@@ -157,7 +159,7 @@ const App = () => {
         </form>
         <h1>{blogToShow.title}</h1>
         <div><a href={`${blogToShow.url}`}>{blogToShow.url}</a><br></br>
-          {blogToShow.likes} likes <button onClick={() => likeBlog(id)}>like</button><br></br>
+          {blogToShow.likes} likes <button onClick={() => likeBlog(blogToShow.id)}>like</button><br></br>
           added by {blogToShow.user.name}
         </div>
         <h3>Comments</h3>
@@ -170,6 +172,7 @@ const App = () => {
     : <LoginView />
 
   return (
+
     <BrowserRouter>
       <div>
         <Link style={padding} to="/">blogs</Link>
