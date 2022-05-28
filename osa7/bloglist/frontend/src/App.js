@@ -11,6 +11,7 @@ import Blog from './components/Blog'
 import Notification from './components/notification'
 import ToggleView from './components/ToggleView'
 import UserTable from './components/UserTable'
+import Comments from './components/Comments'
 import { setMessage, removeMessage } from './reducers/NotificationReducer'
 import { CreateBlog, AddLike } from './reducers/BlogReducer'
 import { setUser } from './reducers/UserReducer'
@@ -21,6 +22,7 @@ const App = () => {
   }
   const blogs = useSelector(state => state.blogs)
   const user = useSelector(state => state.users)
+
   const dispatch = useDispatch()
   const blogFormRef = useRef()
 
@@ -140,11 +142,12 @@ const App = () => {
   }
 
   const BlogView = () => {
-    if (!blogs) {
-      return null
-    }
     const id = useParams().id
     const blogToShow = blogs.find(blog => blog.id === id)
+    if (!blogToShow) {
+      return null
+    }
+
     return (
       <div>
         <form onSubmit={logoutHandler} >
@@ -152,30 +155,34 @@ const App = () => {
           <p>{user.name} logged in </p>
           <button id='logoutBtn' type="submit"> logout</button>
         </form>
-        <h2>{blogToShow.title}</h2>
+        <h1>{blogToShow.title}</h1>
         <div><a href={`${blogToShow.url}`}>{blogToShow.url}</a><br></br>
           {blogToShow.likes} likes <button onClick={() => likeBlog(id)}>like</button><br></br>
           added by {blogToShow.user.name}
         </div>
+        <h3>Comments</h3>
+        <Comments blog={blogToShow} />
       </div>
     )
-
   }
+  const home = user
+    ? <PostView />
+    : <LoginView />
 
-  //const home = user === null ? <LoginView /> : <PostView />
   return (
     <BrowserRouter>
       <div>
         <Link style={padding} to="/">blogs</Link>
         <Link style={padding} to="/users">users</Link>
+
         {user
-          ? <em> logged in</em>
+          ? <em> {user.name} logged in</em>
           : <Link to="/login">login</Link>
         }
-        <button>logout</button>
+
       </div>
       <Routes>
-        <Route path='/' element={<PostView />} />
+        <Route path='/' element={home} />
         <Route path='/login' element={<LoginView />} />
         <Route path='/users' element={<UserView />} />
         <Route path="/users/:id" element={<SingleUserView />} />

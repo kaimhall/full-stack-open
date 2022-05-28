@@ -4,14 +4,22 @@ const User = require('../models/user')
 const postRouter = require('express').Router() //import router..
 const Blog = require('../models/blog') // and mongoose model..
 const Comment = require('../models/comment')
-const comment = require('../models/comment')
 
 postRouter.get('/', async (request, response) => {
   const blog = await Blog
     .find({})
-    .find({}).populate('user', '-blogs')
+    .populate('user', { username: 1, name: 1 })
+    .populate('comment', { comment: 1 })
+
 
   response.json(blog)
+})
+
+postRouter.get('/comments', async (request, response) => {
+  const commentList = await Comment
+    .find({})
+    .populate('blog', { title: 1, id: 1 })
+  response.json(commentList)
 })
 
 postRouter.post('/', async (request, response) => {
@@ -72,6 +80,10 @@ postRouter.delete('/:id', async (request, response) => {
 
 postRouter.delete('/', async (request, response) => {
   await Blog.deleteMany({})
+  response.status(204).end()
+})
+postRouter.delete('/delete', async (request, response) => {
+  await Comment.deleteMany({})
   response.status(204).end()
 })
 

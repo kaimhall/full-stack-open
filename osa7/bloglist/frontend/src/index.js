@@ -8,13 +8,15 @@ import NotificationReducer from './reducers/NotificationReducer'
 import BlogReducer, { InitBlogs } from './reducers/BlogReducer'
 import UserReducer, { setUser } from './reducers/UserReducer'
 import UserListReducer, { InitUserList } from './reducers/UserListReducer'
+import CommentReducer, { InitComments } from './reducers/CommentReducer'
 
 const store = configureStore({
   reducer: {
     notifications: NotificationReducer,
     blogs: BlogReducer,
     users: UserReducer,
-    userlist: UserListReducer
+    userlist: UserListReducer,
+    comments: CommentReducer
   }
 })
 
@@ -26,6 +28,7 @@ if (logUserJSON) {
 
 store.dispatch(InitUserList())
 store.dispatch(InitBlogs())
+store.dispatch(InitComments())
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(

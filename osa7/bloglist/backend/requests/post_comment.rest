@@ -1,7 +1,6 @@
-POST http://localhost:3003/api/blogs/62907acef30ed39425c2e409/comments
+POST http://localhost:3003/api/blogs/62907b03f30ed39425c2e40d/comments
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im9saXZlcmhhbGwiLCJpZCI6IjYyOTA3YTM3ZjMwZWQzOTQyNWMyZTQwMyIsImlhdCI6MTY1MzYzNTk4MX0.SBZ1yC7Pq4jCKfhG_SaQBuW2sLpzZQL-KLNsO-0guv4  
-
+ 
 {
-  "comment": "my comment 2nd"
+  "comment": "commenting root1"
 }
