@@ -50,6 +50,8 @@ postRouter.post('/:id/comments', async (request, response) => {
 })
 
 postRouter.put('/:id', async (request, response) => {
+  console.log(request.params.id)
+
   const blog = request.body
   console.log(request.params.id)
   const updatedBlog = await Blog
@@ -58,7 +60,6 @@ postRouter.put('/:id', async (request, response) => {
       blog,
       { new: true, runValidators: true, context: 'query' }
     )
-
   response.json(updatedBlog)
 })
 
@@ -73,17 +74,12 @@ postRouter.delete('/:id', async (request, response) => {
       error: 'only the creator can delete a blog'
     })
   }
-
   await Blog.findByIdAndRemove(request.params.id)
   response.status(204).end()
 })
 
 postRouter.delete('/', async (request, response) => {
   await Blog.deleteMany({})
-  response.status(204).end()
-})
-postRouter.delete('/delete', async (request, response) => {
-  await Comment.deleteMany({})
   response.status(204).end()
 })
 

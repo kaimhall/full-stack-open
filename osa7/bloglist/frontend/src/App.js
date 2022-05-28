@@ -32,11 +32,9 @@ const App = () => {
       const user = await loginService.login({
         username, password,
       })
+      blogService.setToken(user.token)
       dispatch(setUser(user))
       userService.setUser(user)
-      blogService.setToken(user.token)
-
-      notify(`${user.name} logged in!`)
     } catch (err) { notify('wrong username/password', 'alert') }
   }
 
@@ -93,7 +91,7 @@ const App = () => {
       <div>
         <form onSubmit={logoutHandler} >
           <h2>Blogs</h2>
-          <p>{user.name} logged in </p>
+          <p>{user.name} logged in</p>
           <button id='logoutBtn' type="submit"> logout</button>
         </form>
         <h1>Users</h1>
@@ -115,7 +113,7 @@ const App = () => {
         <div>
           <form onSubmit={logoutHandler} >
             <h2>Blogs</h2>
-            <p>{user.name} logged in </p>
+            <p>{user.name} logged in  </p>
             <button id='logoutBtn' type="submit"> logout</button>
           </form>
         </div>
@@ -159,7 +157,7 @@ const App = () => {
         </form>
         <h1>{blogToShow.title}</h1>
         <div><a href={`${blogToShow.url}`}>{blogToShow.url}</a><br></br>
-          {blogToShow.likes} likes <button onClick={() => likeBlog(blogToShow.id)}>like</button><br></br>
+          {blogToShow.likes} likes <button onClick={() => likeBlog(id)}>like</button><br></br>
           added by {blogToShow.user.name}
         </div>
         <h3>Comments</h3>
@@ -167,15 +165,12 @@ const App = () => {
       </div>
     )
   }
-  const home = user
-    ? <PostView />
-    : <LoginView />
 
   return (
 
     <BrowserRouter>
       <div>
-        <Link style={padding} to="/">blogs</Link>
+        <Link style={padding} to="/blogs">blogs</Link>
         <Link style={padding} to="/users">users</Link>
 
         {user
@@ -185,7 +180,8 @@ const App = () => {
 
       </div>
       <Routes>
-        <Route path='/' element={home} />
+        <Route path='/' element={<UserView />} />
+        <Route path='/blogs' element={<PostView />} />
         <Route path='/login' element={<LoginView />} />
         <Route path='/users' element={<UserView />} />
         <Route path="/users/:id" element={<SingleUserView />} />

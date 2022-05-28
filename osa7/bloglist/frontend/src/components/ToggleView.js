@@ -13,7 +13,7 @@ const ToggleView = ({ children }) => {
 
   return (
     <div key={id} style={blogStyle} className='blogViewContent'>
-      <Link to={`blogs/${id}`}>{title} {author}</Link> <br></br>
+      <Link to={`/blogs/${id}`}>{title} {author}</Link> <br></br>
     </div>
   )
 }

@@ -38,10 +38,12 @@ const create = async newObject => {
 
 const update = async (newObject, id) => {
   const address = `${baseUrl}/${id}`
+  console.log(id, address)
 
   const config = {
     headers: { Authorization: token }
   }
+
   const response = await axios.put(
     address,
     newObject,

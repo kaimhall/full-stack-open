@@ -62,7 +62,7 @@ export const AddLike = (object, id, user) => {
   return async dispatch => {
     blogService.setToken(user.token)
     const newBlog = await blogService.update(object, id)
-    console.log(newBlog)
+
     dispatch(likeBlog(newBlog))
   }
 }
