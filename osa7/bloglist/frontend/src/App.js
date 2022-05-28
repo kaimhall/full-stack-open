@@ -15,6 +15,7 @@ import Comments from './components/Comments'
 import { setMessage, removeMessage } from './reducers/NotificationReducer'
 import { CreateBlog, AddLike } from './reducers/BlogReducer'
 import { setUser } from './reducers/UserReducer'
+import { Nav, Navbar, Button } from 'react-bootstrap'
 
 const App = () => {
 
@@ -90,11 +91,11 @@ const App = () => {
     return (
       <div>
         <form onSubmit={logoutHandler} >
-          <h2>Blogs</h2>
+          <h2>Blog App</h2>
           <p>{user.name} logged in</p>
-          <button id='logoutBtn' type="submit"> logout</button>
+          <Button id='logoutBtn' type="submit"> logout</Button>
         </form>
-        <h1>Users</h1>
+        <h2>Users</h2>
         <UserTable />
       </div>
     )
@@ -112,14 +113,14 @@ const App = () => {
       <div>
         <div>
           <form onSubmit={logoutHandler} >
-            <h2>Blogs</h2>
+            <h2>Blog app</h2>
             <p>{user.name} logged in  </p>
-            <button id='logoutBtn' type="submit"> logout</button>
+            <Button id='logoutBtn' type="submit"> logout</Button>
           </form>
         </div>
         <div>
-          <h1>{user.name}</h1>
-          <h3>added blogs</h3>
+          <h2>{user.name}</h2>
+          <p>added blogs</p>
           <ul>
             {userBlogs.map(blog =>
               <li key={blog.id}>{blog.title}</li>)}
@@ -150,14 +151,14 @@ const App = () => {
 
     return (
       <div>
-        <form onSubmit={logoutHandler} >
+        <form >
           <h2>Blogs</h2>
           <p>{user.name} logged in </p>
-          <button id='logoutBtn' type="submit"> logout</button>
         </form>
-        <h1>{blogToShow.title}</h1>
+        <h2>{blogToShow.title}</h2>
         <div><a href={`${blogToShow.url}`}>{blogToShow.url}</a><br></br>
-          {blogToShow.likes} likes <button onClick={() => likeBlog(id)}>like</button><br></br>
+          {blogToShow.likes} likes
+          <Button onClick={() => likeBlog(id)}>like</Button><br></br>
           added by {blogToShow.user.name}
         </div>
         <h3>Comments</h3>
@@ -167,27 +168,43 @@ const App = () => {
   }
 
   return (
-
-    <BrowserRouter>
-      <div>
-        <Link style={padding} to="/blogs">blogs</Link>
-        <Link style={padding} to="/users">users</Link>
-
-        {user
-          ? <em> {user.name} logged in</em>
-          : <Link to="/login">login</Link>
-        }
-
-      </div>
-      <Routes>
-        <Route path='/' element={<UserView />} />
-        <Route path='/blogs' element={<PostView />} />
-        <Route path='/login' element={<LoginView />} />
-        <Route path='/users' element={<UserView />} />
-        <Route path="/users/:id" element={<SingleUserView />} />
-        <Route path="/blogs/:id" element={<BlogView />} />
-      </Routes>
-    </BrowserRouter>
+    <div className="container">
+      <BrowserRouter>
+        <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+          <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+          <Navbar.Collapse id="responsive-navbar-nav">
+            <Nav className="mr-auto">
+              <Nav.Link href="#" as="span">
+                <Link style={padding} to="/blogs">blogs</Link>
+              </Nav.Link>
+              <Nav.Link href="#" as="span">
+                <Link style={padding} to="/users">users</Link>
+              </Nav.Link>
+              <Nav.Link href="#" as="span">
+                {user
+                  ? <em>{user.name} logged in</em>
+                  : <Link to="/login">login</Link>
+                }
+              </Nav.Link>
+              <Button
+                variant='primary'
+                style={padding}
+                onClick={logoutHandler}>
+                logout
+              </Button>
+            </Nav>
+          </Navbar.Collapse>
+        </Navbar>
+        <Routes>
+          <Route path='/' element={<UserView />} />
+          <Route path='/blogs' element={<PostView />} />
+          <Route path='/login' element={<LoginView />} />
+          <Route path='/users' element={<UserView />} />
+          <Route path="/users/:id" element={<SingleUserView />} />
+          <Route path="/blogs/:id" element={<BlogView />} />
+        </Routes>
+      </BrowserRouter>
+    </div>
   )
 }
 

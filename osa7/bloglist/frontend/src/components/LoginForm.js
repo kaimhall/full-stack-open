@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import { Form, Button } from 'react-bootstrap'
 
 const LoginForm = ({ onLogin }) => {
   useSelector(state => state.users)
@@ -18,24 +19,23 @@ const LoginForm = ({ onLogin }) => {
   return (
     <div>
       <h2>Log in to application</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          username
-          <input
+      <Form onSubmit={handleSubmit}>
+        <Form.Group>
+          <Form.Label>username</Form.Label>
+          <Form.Control
             type='text'
-            value={username}
+            name='username'
             onChange={({ target }) => setUsername(target.value)}
           />
-        </div>
-        <div>
-          password
-          <input
-            type='text'
+          <Form.Label>password</Form.Label>
+          <Form.Control
+            type='password'
             value={password}
-            onChange={({ target }) => setPassword(target.value)} />
-        </div>
-        <button id='loginBtn' type="submit">login</button>
-      </form>
+            onChange={({ target }) => setPassword(target.value)}
+          />
+          <Button variant='primary' type="submit">login</Button>
+        </Form.Group>
+      </Form>
     </div>
   )
 }
